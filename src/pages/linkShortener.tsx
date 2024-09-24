@@ -16,7 +16,18 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
+import { UserIcon } from "../components/custom/UserIcon";
+import { useEffect } from "react";
+import axios from "axios";
+
 const Link = () => {
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = axios.get("");
+      console.log(response);
+    };
+    fetchData();
+  }, []);
   return (
     <>
       <div className="mb-12">
@@ -59,10 +70,7 @@ const Link = () => {
         </div>
         <div className="my-3">239 clicks</div>
         <div className="flex items-center space-x-3 my-3">
-          <Avatar>
-            <AvatarImage src="https://github.com/shadcn.png" />
-            <AvatarFallback>CN</AvatarFallback>
-          </Avatar>
+          <UserIcon userName={"sean_robenta@dlsu.edu.ph"}></UserIcon>
           <p>Created by lscs@dlsu.edu.ph</p>
         </div>
         <Separator className="bg-[#1D283A] my-2`" />

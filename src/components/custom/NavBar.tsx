@@ -13,6 +13,8 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 import lscs_white from "../../assets/lscs_white.png";
 
+import { UserIcon } from "./UserIcon";
+
 export const NavBar = () => {
   return (
     <>
@@ -63,10 +65,7 @@ export const NavBar = () => {
               </NavigationMenuList>
             </NavigationMenu>
           </div>
-          <Avatar>
-            <AvatarImage src="https://github.com/shadcn.png" />
-            <AvatarFallback>CN</AvatarFallback>
-          </Avatar>
+          <UserIcon></UserIcon>
         </div>
       </header>
     </>
