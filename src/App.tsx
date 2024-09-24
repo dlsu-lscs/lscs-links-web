@@ -1,4 +1,3 @@
-import { Home } from "./pages/home";
 import { Layout } from "./layout/Layout";
 
 const App = () => {
