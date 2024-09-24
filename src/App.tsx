@@ -1,7 +1,10 @@
+import { Home } from "./pages/home";
+import { Layout } from "./layout/Layout";
+
 const App = () => {
   return (
     <>
-      <h1>LSCS Links</h1>
+      <Layout></Layout>
     </>
   );
 };
