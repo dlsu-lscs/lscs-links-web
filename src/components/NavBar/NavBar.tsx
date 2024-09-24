@@ -13,7 +13,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 import lscs_white from "../../assets/lscs_white.png";
 
-import { UserIcon } from "./UserIcon";
+import { UserIcon } from "@/components/User_Icon/UserIcon";
 
 export const NavBar = () => {
   return (

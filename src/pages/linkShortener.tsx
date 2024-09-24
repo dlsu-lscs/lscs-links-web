@@ -16,18 +16,12 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
-import { UserIcon } from "../components/custom/UserIcon";
-import { useEffect } from "react";
-import axios from "axios";
+import { UserIcon } from "@/components/User_Icon/UserIcon";
+
+import { useFetch } from "@/hooks/useFetch";
 
 const Link = () => {
-  useEffect(() => {
-    const fetchData = async () => {
-      const response = axios.get("");
-      console.log(response);
-    };
-    fetchData();
-  }, []);
+  const { data, loading, error } = useFetch("https://lscs.info/admin/links");
   return (
     <>
       <div className="mb-12">
