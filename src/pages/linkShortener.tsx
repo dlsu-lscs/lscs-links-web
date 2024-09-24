@@ -11,7 +11,7 @@ import {
 import { Separator } from "@/components/ui/separator";
 
 const Links = () => {
-  return <>burat</>;
+  // return <>burat</>;
 };
 
 export const LinkShortener = () => {
