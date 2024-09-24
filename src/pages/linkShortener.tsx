@@ -14,10 +14,12 @@ import { Badge } from "@/components/ui/badge";
 
 import { ScrollArea } from "@/components/ui/scroll-area";
 
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+
 const Link = () => {
   return (
     <>
-      <div>
+      <div className="mb-12">
         <div className="flex items-center space-x-3">
           <p className="text-2xl">
             <span className="font-bold">lscs.info</span>/ExcuseLetterForm
@@ -38,6 +40,32 @@ const Link = () => {
           </svg>
           <Badge className="text-black bg-white font-bold">rnd</Badge>
         </div>
+        <div className="text-slate-500 flex items-end space-x-2 mt-1">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={1.5}
+            stroke="currentColor"
+            className="size-6"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M13.19 8.688a4.5 4.5 0 0 1 1.242 7.244l-4.5 4.5a4.5 4.5 0 0 1-6.364-6.364l1.757-1.757m13.35-.622 1.757-1.757a4.5 4.5 0 0 0-6.364-6.364l-4.5 4.5a4.5 4.5 0 0 0 1.242 7.244"
+            />
+          </svg>
+          <p className="text-xl">forms.gle/aked9reegkczkdefa</p>
+        </div>
+        <div className="my-3">239 clicks</div>
+        <div className="flex items-center space-x-3 my-3">
+          <Avatar>
+            <AvatarImage src="https://github.com/shadcn.png" />
+            <AvatarFallback>CN</AvatarFallback>
+          </Avatar>
+          <p>Created by lscs@dlsu.edu.ph</p>
+        </div>
+        <Separator className="bg-[#1D283A] my-2`" />
       </div>
     </>
   );
@@ -46,9 +74,13 @@ const Link = () => {
 const Links = () => {
   return (
     <>
-      <Link></Link>
-      {/* <ScrollArea className="h-[200px] w-[350px] rounded-md p-4 border-2 my-8">
-      </ScrollArea> */}
+      <ScrollArea className="h-[400px] w-[720px] rounded-md  space-y-3">
+        <Link></Link>
+        <Link></Link>
+        <Link></Link>
+        <Link></Link>
+        <Link></Link>
+      </ScrollArea>
     </>
   );
 };
