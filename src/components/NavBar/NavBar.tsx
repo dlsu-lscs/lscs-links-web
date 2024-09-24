@@ -15,6 +15,8 @@ import lscs_white from "../../assets/lscs_white.png";
 
 import { UserIcon } from "@/components/User_Icon/UserIcon";
 
+import { Link } from "react-router-dom";
+
 export const NavBar = () => {
   return (
     <>
@@ -26,13 +28,13 @@ export const NavBar = () => {
             <p>39th La Salle Computer Society</p>
           </div>
         </div>
-        <div className="flex space-x-6">
+        <div className="flex space-x-8">
           <div className="flex bg-[#1D283A] rounded-lg">
             <NavigationMenu>
               <NavigationMenuList>
                 <NavigationMenuItem>
                   <NavigationMenuTrigger className="bg-[#1D283A]">
-                    Link Shortener
+                    <Link to="/">Link Shortener</Link>
                   </NavigationMenuTrigger>
                   {/* <NavigationMenuContent>
                     <NavigationMenuLink>Link</NavigationMenuLink>
@@ -65,7 +67,9 @@ export const NavBar = () => {
               </NavigationMenuList>
             </NavigationMenu>
           </div>
-          <UserIcon></UserIcon>
+          <Link to="/login">
+            <UserIcon></UserIcon>
+          </Link>
         </div>
       </header>
     </>
