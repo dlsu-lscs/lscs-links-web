@@ -63,7 +63,7 @@ export const LinkShortener = () => {
     <>
       <div className="min-h-screen bg-[#000000] text-white px-28 py-8">
         <div className="flex items-end space-x-5">
-          <h1 className="font-bold text-5xl">Shortened Links</h1>
+          <h1 className="font-bold text-4xl">Shortened Links</h1>
           <Button variant="outline" className="text-black">
             Create New
           </Button>
