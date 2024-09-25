@@ -31,7 +31,8 @@ const loginSchema = z.object({
 });
 
 export const LogIn = () => {
-  const [cookies, setCookie] = useCookies(["currentUser"]);
+  const [currentUser, setCurrentUser] = useCookies(["currentUser"]);
+  const [currentToken, setCurrentToken] = useCookies(["currentToken"]);
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -56,7 +57,8 @@ export const LogIn = () => {
         if (response.data.status == "success") {
           window.location.replace("/");
         }
-        setCookie("currentUser", response.data.user, { path: "/" });
+        setCurrentUser("currentUser", response.data.user, { path: "/" });
+        setCurrentToken("currentToken", response.data.token, { path: "/" });
       } catch (e) {
         console.log(e);
       }

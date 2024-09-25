@@ -20,8 +20,9 @@ import { UserIcon } from "@/components/User_Icon/UserIcon";
 
 import { useFetch } from "@/hooks/useFetch";
 
+import { useCookies } from "react-cookie";
+
 const Link = () => {
-  const { data, loading, error } = useFetch("https://lscs.info/admin/links");
   return (
     <>
       <div className="mb-12">
@@ -74,6 +75,13 @@ const Link = () => {
 };
 
 const Links = () => {
+  const [currentToken] = useCookies(["currentToken"]);
+  const token = currentToken.currentToken;
+  console.log(token);
+  const { data, loading, error } = useFetch(
+    "https://lscs.info/admin/links",
+    token
+  );
   return (
     <>
       <ScrollArea className="h-[400px] w-[720px] rounded-md  space-y-3">

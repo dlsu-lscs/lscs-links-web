@@ -5,7 +5,6 @@ type email = {
 };
 
 export const UserIcon = ({ email }: { email: string }) => {
-  console.log(email);
   if (email != undefined) {
     const getInitials = (name: string) => {
       const initials = name.split("_").map((i) => i[0].toUpperCase());

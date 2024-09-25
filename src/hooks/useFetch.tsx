@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 
-export const useFetch = (url: string) => {
+export const useFetch = (url: string, token: string) => {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(null);
   const [error, setError] = useState(null);
@@ -14,7 +14,7 @@ export const useFetch = (url: string) => {
         setLoading(false);
         const response = await axios.get(url, {
           headers: {
-            Authorization: "Bearer hello", // Add your token here
+            Authorization: `Bearer ${token}`, // Add your token here
             "Content-Type": "application/json",
           },
         });
