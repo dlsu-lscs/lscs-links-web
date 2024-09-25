@@ -1,21 +1,37 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
-export const UserIcon = (userName: string) => {
-  const getInitials = (name: string) => {
-    const initials = name.split("_").map((i) => i[0].toUpperCase());
-    return initials.length == 2 ? initials.join("") : initials[0];
-  };
+type email = {
+  email: string;
+};
 
-  const initials = getInitials("jose_simbillo@dlsu.edu.ph");
+export const UserIcon = ({ email }: { email: string }) => {
+  console.log(email);
+  if (email != undefined) {
+    const getInitials = (name: string) => {
+      const initials = name.split("_").map((i) => i[0].toUpperCase());
+      return initials.length == 2 ? initials.join("") : initials[0];
+    };
 
-  return (
-    <>
-      <Avatar>
-        <AvatarImage src="" />
-        <AvatarFallback className="text-black">
-          {initials.toUpperCase()}
-        </AvatarFallback>
-      </Avatar>
-    </>
-  );
+    const initials = getInitials(email.email);
+
+    return (
+      <>
+        <Avatar>
+          <AvatarImage src="" />
+          <AvatarFallback className="text-black">
+            {initials.toUpperCase()}
+          </AvatarFallback>
+        </Avatar>
+      </>
+    );
+  } else {
+    return (
+      <>
+        <Avatar>
+          <AvatarImage src="" />
+          <AvatarFallback className="text-black"></AvatarFallback>
+        </Avatar>
+      </>
+    );
+  }
 };

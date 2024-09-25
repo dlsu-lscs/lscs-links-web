@@ -16,8 +16,12 @@ import lscs_white from "../../assets/lscs_white.png";
 import { UserIcon } from "@/components/User_Icon/UserIcon";
 
 import { Link } from "react-router-dom";
+import { useCookies } from "react-cookie";
 
 export const NavBar = () => {
+  const [currentUser] = useCookies(["currentUser"]);
+  const user = currentUser.currentUser;
+  console.log(user);
   return (
     <>
       <header className="bg-[black] text-[#FFFFFF] flex justify-between items-center px-8 py-4">
@@ -67,8 +71,8 @@ export const NavBar = () => {
               </NavigationMenuList>
             </NavigationMenu>
           </div>
-          <Link to="/login">
-            <UserIcon></UserIcon>
+          <Link to="/accessAccount">
+            <UserIcon email={{ email: user.email }}></UserIcon>
           </Link>
         </div>
       </header>

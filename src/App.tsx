@@ -1,12 +1,15 @@
 import { Layout } from "./layout/Layout";
 import { BrowserRouter as Router } from "react-router-dom";
+import { CookiesProvider } from "react-cookie";
 
 const App = () => {
   return (
     <>
-      <Router>
-        <Layout></Layout>
-      </Router>
+      <CookiesProvider>
+        <Router>
+          <Layout></Layout>
+        </Router>
+      </CookiesProvider>
     </>
   );
 };
