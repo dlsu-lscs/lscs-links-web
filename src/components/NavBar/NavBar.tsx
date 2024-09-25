@@ -21,7 +21,6 @@ import { useCookies } from "react-cookie";
 export const NavBar = () => {
   const [currentUser] = useCookies(["currentUser"]);
   const user = currentUser.currentUser;
-  console.log(user);
   return (
     <>
       <header className="bg-[black] text-[#FFFFFF] flex justify-between items-center px-8 py-4">
