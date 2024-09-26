@@ -5,14 +5,28 @@ import { useCookies } from "react-cookie";
 
 import { ScrollArea } from "../ui/scroll-area";
 
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
+import { useState } from "react";
+
 export const Links = () => {
   const [currentToken, setCurrentToken, removeCurrentToken] = useCookies([
     "currentToken",
   ]);
+
+  const [page, setPage] = useState(1);
   const { data, loading, error } = useFetch(
-    "https://lscs.info/admin/links",
+    "https://lscs.info/admin/links?limit=10&page=" + page,
     currentToken.currentToken
   );
+  const totalPage = data?.totalPages;
 
   //if forbidden delete code!
   if (error == 403) {
@@ -55,20 +69,43 @@ export const Links = () => {
 
   return (
     <>
-      <ScrollArea className="h-[400px] w-[720px] rounded-md  space-y-3">
-        {data?.data.map((link) => {
-          return (
-            <>
-              <Link
-                createdBy={link.created_by}
-                longLink={link.longlink}
-                shortLink={link.shortlink}
-                qr={link.qr_preview}
-              ></Link>
-            </>
-          );
-        })}
-      </ScrollArea>
+      <div className="flex justify-center flex-col items-center space-y-6 my-12">
+        <ScrollArea className="h-[400px] w-[720px] rounded-md  space-y-3">
+          {data?.data.map((link) => {
+            return (
+              <>
+                <Link
+                  linkID={link._id}
+                  createdBy={link.created_by}
+                  longLink={link.longlink}
+                  shortLink={link.shortlink}
+                  qr={link.qr_preview}
+                ></Link>
+              </>
+            );
+          })}
+        </ScrollArea>
+        <div className="flex justify-center">
+          <Pagination>
+            <PaginationContent>
+              <PaginationItem>
+                <PaginationPrevious
+                  onClick={() => {
+                    if (page > 0) setPage(page - 1);
+                  }}
+                />
+              </PaginationItem>
+              <PaginationItem>
+                <PaginationNext
+                  onClick={() => {
+                    if (page < totalPage) setPage(page + 1);
+                  }}
+                />
+              </PaginationItem>
+            </PaginationContent>
+          </Pagination>
+        </div>
+      </div>
     </>
   );
 };
