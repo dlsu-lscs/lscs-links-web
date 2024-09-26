@@ -8,8 +8,6 @@ export const useFetch = (url: string, token: string) => {
 
   useEffect(() => {
     const fetchData = async () => {
-      setLoading(true);
-      setError(null);
       try {
         const response = await axios.get(url, {
           headers: {
@@ -17,19 +15,15 @@ export const useFetch = (url: string, token: string) => {
             "Content-Type": "application/json",
           },
         });
-        if (response == null || response == undefined) {
-          window.location.replace("/login");
-        }
-        setData(response);
-        setLoading(false);
+        setData(response.data);
       } catch (e) {
+        setError(error);
+      } finally {
         setLoading(false);
-        setError(e);
       }
-      setLoading(false);
     };
     fetchData();
-  }, [url, token]);
+  }, [url]);
 
   return { data, loading, error };
 };

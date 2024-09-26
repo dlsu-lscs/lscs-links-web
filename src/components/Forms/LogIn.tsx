@@ -33,6 +33,7 @@ const loginSchema = z.object({
 export const LogIn = () => {
   const [currentUser, setCurrentUser] = useCookies(["currentUser"]);
   const [currentToken, setCurrentToken] = useCookies(["currentToken"]);
+
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -49,7 +50,6 @@ export const LogIn = () => {
           { email: values.email, password: values.password },
           {
             headers: {
-              Authorization: "Bearer hello", // Add your token here
               "Content-Type": "application/json",
             },
           }

@@ -1,5 +1,3 @@
-import { Button } from "@/components/ui/button";
-
 import {
   Select,
   SelectContent,
@@ -11,6 +9,7 @@ import {
 import { Separator } from "@/components/ui/separator";
 
 import { Links } from "@/components/Links/Links";
+import { CreateLink } from "@/components/Forms/CreateLink";
 
 export const LinkShortener = () => {
   const lscsCommittees = [
@@ -23,9 +22,7 @@ export const LinkShortener = () => {
       <div className="min-h-screen bg-[#000000] text-white px-28 py-8">
         <div className="flex items-end space-x-5">
           <h1 className="font-bold text-4xl">Shortened Links</h1>
-          <Button variant="outline" className="text-black">
-            Create New
-          </Button>
+          <CreateLink></CreateLink>
           <Select>
             <SelectTrigger className="w-[180px] border-2 border-[#1D283A] bg-[#030711] text-white">
               <SelectValue placeholder="Committee" />

@@ -2,14 +2,33 @@ import { UserIcon } from "@/components/User_Icon/UserIcon";
 
 import { Badge } from "../ui/badge";
 import { Separator } from "../ui/separator";
+import { useFetch } from "@/hooks/useFetch";
 
 type linkData = {
   createdBy: string;
   longLink: string;
   shortLink: string;
+  qr: string;
 };
 
-export const Link = ({ createdBy, longLink, shortLink }: linkData) => {
+import { useCookies } from "react-cookie";
+
+export const Link = ({ createdBy, longLink, shortLink, qr }: linkData) => {
+  const [currentToken] = useCookies(["currentToken"]);
+  const token = currentToken.currentToken;
+  const { data, loading, error } = useFetch(
+    `https://lscs.info/analytics/${shortLink}`,
+    token
+  );
+
+  if (loading) {
+    return (
+      <>
+        <p className="text-white"></p>
+      </>
+    );
+  }
+  console.log(qr);
   return (
     <>
       <div className="mb-12">
@@ -52,11 +71,16 @@ export const Link = ({ createdBy, longLink, shortLink }: linkData) => {
             {longLink}
           </a>
         </div>
-        <div className="my-3">239 clicks</div>
+        <div className="my-3">{data.count} clicks</div>
         <div className="flex items-center space-x-3 my-3">
           <UserIcon email={{ email: createdBy }}></UserIcon>
           <p>Created by {createdBy}</p>
         </div>
+        {qr ? (
+          <>
+            <img src={qr} alt="" />
+          </>
+        ) : null}
         <Separator className="bg-[#1D283A] my-2`" />
       </div>
     </>
