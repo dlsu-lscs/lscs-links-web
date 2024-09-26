@@ -84,9 +84,6 @@ export const CreateLink = () => {
             Create Short Link
           </p>
           <div className="space-y-8 bg-[#030711] border-2 border-[#1D283A] rounded-lg px-8 py-6 flex flex-col">
-            <p className="text-[#7F8EA3]">
-              Make changes to your account here. Click save when you're done.
-            </p>
             <Form {...form}>
               <form
                 onSubmit={form.handleSubmit(onSubmit)}

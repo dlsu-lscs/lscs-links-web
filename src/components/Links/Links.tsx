@@ -6,12 +6,18 @@ import { useCookies } from "react-cookie";
 import { ScrollArea } from "../ui/scroll-area";
 
 export const Links = () => {
-  const [currentToken] = useCookies(["currentToken"]);
-  const token = currentToken.currentToken;
+  const [currentToken, setCurrentToken, removeCurrentToken] = useCookies([
+    "currentToken",
+  ]);
   const { data, loading, error } = useFetch(
     "https://lscs.info/admin/links",
-    token
+    currentToken.currentToken
   );
+
+  //if forbidden delete code!
+  if (error == 403) {
+    removeCurrentToken("currentToken");
+  }
 
   if (loading) {
     return (

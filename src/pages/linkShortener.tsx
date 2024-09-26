@@ -11,11 +11,20 @@ import { Separator } from "@/components/ui/separator";
 import { Links } from "@/components/Links/Links";
 import { CreateLink } from "@/components/Forms/CreateLink";
 
+import { useCookies } from "react-cookie";
+
 export const LinkShortener = () => {
   const lscsCommittees = [
     { name: "Research and Development", abbreviation: "rnd" },
     { name: "Academics", abbreviation: "acads" },
   ];
+
+  //check if there is current token
+  const [currentToken, setCurrentToken, removeCurrentToken] = useCookies([
+    "currentToken",
+  ]);
+  if (!("currentToken" in currentToken))
+    window.location.replace("/accessAccount");
 
   return (
     <>

@@ -17,7 +17,7 @@ export const useFetch = (url: string, token: string) => {
         });
         setData(response.data);
       } catch (e) {
-        setError(error);
+        setError(e.response.status);
       } finally {
         setLoading(false);
       }

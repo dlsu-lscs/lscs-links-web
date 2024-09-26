@@ -1,6 +1,7 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 import { LogIn } from "@/components/Forms/LogIn";
+import { Register } from "@/components/Forms/Register";
 
 export const AccessAccount = () => {
   return (
@@ -15,7 +16,7 @@ export const AccessAccount = () => {
               <TabsTrigger value="logIn" className="bg-[#1D283A]">
                 Log-In
               </TabsTrigger>
-              <TabsTrigger value="password" className="bg-[#1D283A]">
+              <TabsTrigger value="register" className="bg-[#1D283A]">
                 Register
               </TabsTrigger>
             </TabsList>
@@ -23,8 +24,9 @@ export const AccessAccount = () => {
               <p className="font-bold text-3xl">Log-In</p>
               <LogIn></LogIn>
             </TabsContent>
-            <TabsContent value="password">
-              Change your password here.
+            <TabsContent value="register" className="space-y-3">
+              <p className="font-bold text-3xl">Register</p>
+              <Register></Register>
             </TabsContent>
           </Tabs>
         </div>
