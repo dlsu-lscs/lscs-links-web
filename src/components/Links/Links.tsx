@@ -27,6 +27,12 @@ export const Links = () => {
     currentToken.currentToken
   );
   const totalPage = data?.totalPages;
+  const sortedData = data?.data.sort(
+    (newData, oldData) =>
+      new Date(oldData.created_at) - new Date(newData.created_at)
+  );
+
+  console.log(sortedData);
 
   //if forbidden delete code!
   if (error == 403) {
@@ -69,9 +75,9 @@ export const Links = () => {
 
   return (
     <>
-      <div className="flex justify-center flex-col items-center space-y-6 my-12">
-        <ScrollArea className="h-[400px] w-[720px] rounded-md  space-y-3">
-          {data?.data.map((link) => {
+      <div className="flex justify-center flex-col items-center space-y-3">
+        <ScrollArea className="h-[400px] min-w-lg rounded-md  space-y-3">
+          {sortedData.map((link) => {
             return (
               <>
                 <Link
@@ -105,6 +111,7 @@ export const Links = () => {
             </PaginationContent>
           </Pagination>
         </div>
+        <p>Page: {page}</p>
       </div>
     </>
   );
