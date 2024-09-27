@@ -68,7 +68,9 @@ export const Links = () => {
   if (error) {
     return (
       <>
-        <p className="text-white">Error.... {error}</p>
+        <p className="text-white">
+          Error.... {error} {":((("}
+        </p>
       </>
     );
   }
