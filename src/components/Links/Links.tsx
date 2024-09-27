@@ -76,7 +76,7 @@ export const Links = () => {
   return (
     <>
       <div className="flex justify-center flex-col items-center space-y-3">
-        <ScrollArea className="h-[400px] min-w-lg rounded-md  space-y-3">
+        <ScrollArea className="h-[400px] w-[1200px] rounded-md  space-y-3">
           {sortedData.map((link) => {
             return (
               <>

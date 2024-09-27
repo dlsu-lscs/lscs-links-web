@@ -98,7 +98,6 @@ export const CreateLink = () => {
                         <FormLabel className="text-white">Short Link</FormLabel>
                         <FormControl>
                           <Input
-                            placeholder="lscs"
                             {...field}
                             className="text-white bg-[#030711] border-2 border-[#1D283A] rounded-lg"
                           />
@@ -117,7 +116,6 @@ export const CreateLink = () => {
                         <FormLabel className="text-white">Long Link</FormLabel>
                         <FormControl>
                           <Input
-                            placeholder="lscsinfo/"
                             {...field}
                             className="text-white bg-[#030711] border-2 border-[#1D283A] rounded-lg"
                           />
@@ -134,7 +132,9 @@ export const CreateLink = () => {
                   >
                     Continue
                   </AlertDialogAction>
-                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <AlertDialogCancel className="bg-transparent border-transparent text-white">
+                    Cancel
+                  </AlertDialogCancel>
                 </div>
               </form>
             </Form>
