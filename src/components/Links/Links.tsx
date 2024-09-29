@@ -8,33 +8,37 @@ import { ScrollArea } from "../ui/scroll-area";
 import {
   Pagination,
   PaginationContent,
-  PaginationEllipsis,
   PaginationItem,
-  PaginationLink,
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
 import { useState } from "react";
 
+type LinkData = {
+  _id: string;
+  created_by: string;
+  longlink: string;
+  shortlink: string;
+  qr_preview: string;
+};
+
+type Data = {
+  data: LinkData[];
+  totalPages?: number;
+};
+
 export const Links = () => {
-  const [currentToken, setCurrentToken, removeCurrentToken] = useCookies([
-    "currentToken",
-  ]);
+  const [currentToken, , removeCurrentToken] = useCookies(["currentToken"]);
 
   const [page, setPage] = useState(1);
   const { data, loading, error } = useFetch(
     "https://lscs.info/admin/links?limit=10&page=" + page,
     currentToken.currentToken
   );
-  const totalPage = data?.totalPages;
-  const sortedData = data?.data.sort(
-    (newData, oldData) =>
-      new Date(oldData.created_at) - new Date(newData.created_at)
-  );
+  const fetchedData: Data | null = data as Data | null;
 
-  console.log(sortedData);
+  const totalPage = fetchedData?.totalPages ?? 1;
 
-  //if forbidden delete code!
   if (error == 403) {
     removeCurrentToken("currentToken");
   }
@@ -78,8 +82,8 @@ export const Links = () => {
   return (
     <>
       <div className="flex justify-center flex-col items-center space-y-3">
-        <ScrollArea className="h-[400px] w-[1200px] rounded-md  space-y-3">
-          {sortedData.map((link) => {
+        <ScrollArea className="h-[400px] w-[720px] rounded-md  space-y-3">
+          {fetchedData?.data.map((link) => {
             return (
               <>
                 <Link

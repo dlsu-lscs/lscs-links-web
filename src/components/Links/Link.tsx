@@ -13,6 +13,10 @@ type linkData = {
   qr: string;
 };
 
+type countData = {
+  count: number;
+};
+
 import { useCookies } from "react-cookie";
 
 export const Link = ({
@@ -24,10 +28,13 @@ export const Link = ({
 }: linkData) => {
   const [currentToken] = useCookies(["currentToken"]);
   const token = currentToken.currentToken;
-  const { data, loading, error } = useFetch(
+  const { data, loading } = useFetch(
     `https://lscs.info/analytics/${shortLink}`,
     token
   );
+
+  const fetchedData: countData | null = data as countData | null;
+  console.log(fetchedData);
 
   if (loading) {
     return (
@@ -87,9 +94,9 @@ export const Link = ({
                 {longLink}
               </p>
             </div>
-            <div className="my-3">{data.count} clicks</div>
+            <div className="my-3">{fetchedData?.count ?? 0} clicks</div>
             <div className="flex items-center space-x-3 my-3">
-              <UserIcon email={{ email: createdBy }}></UserIcon>
+              <UserIcon email={createdBy}></UserIcon>
               <p>Created by {createdBy}</p>
             </div>
           </div>

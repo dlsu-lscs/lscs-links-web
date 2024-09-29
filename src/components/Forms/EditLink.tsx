@@ -3,7 +3,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import { Button } from "@/components/ui/button";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -19,7 +18,6 @@ import {
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -27,23 +25,20 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 
-import { useEffect } from "react";
 import { useCookies } from "react-cookie";
-import { useFetch } from "@/hooks/useFetch";
 
 const linkSchema = z.object({
   longLink: z.string(),
   shortLink: z.string(),
 });
 
-export const EditLink = (linkID: string) => {
+type editLink = {
+  linkID: string;
+};
+
+export const EditLink = ({ linkID }: editLink) => {
   const [currentToken] = useCookies(["currentToken"]);
   const token = currentToken.currentToken;
-
-  const { data, loading, error } = useFetch(
-    `https://lscs.info/admin/link/${linkID.linkID}`,
-    token
-  );
 
   const form = useForm<z.infer<typeof linkSchema>>({
     resolver: zodResolver(linkSchema),
@@ -52,13 +47,14 @@ export const EditLink = (linkID: string) => {
       shortLink: "",
     },
   });
+  console.log(linkID);
 
   const onSubmit = (values: z.infer<typeof linkSchema>) => {
     console.log(values);
     const editData = async () => {
       try {
         const response = await axios.put(
-          "https://lscs.info/admin/links/" + linkID.linkID,
+          "https://lscs.info/admin/links/" + linkID,
           { longlink: values.longLink, shortlink: values.shortLink },
           {
             headers: {
@@ -83,7 +79,7 @@ export const EditLink = (linkID: string) => {
     const deleteData = async () => {
       try {
         const response = await axios.delete(
-          "https://lscs.info/admin/links/" + linkID.linkID,
+          "https://lscs.info/admin/links/" + linkID,
           {
             headers: {
               Authorization: `Bearer ${token}`,

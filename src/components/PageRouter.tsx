@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Route, Link, Routes } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 
 import { LinkShortener } from "@/pages/linkShortener";
 import { AccessAccount } from "@/pages/accessAccount";

@@ -4,14 +4,14 @@ type email = {
   email: string;
 };
 
-export const UserIcon = ({ email }: { email: string }) => {
-  if (email != undefined) {
+export const UserIcon = ({ email }: email) => {
+  if (email != "") {
     const getInitials = (name: string) => {
       const initials = name.split("_").map((i) => i[0].toUpperCase());
       return initials.length == 2 ? initials.join("") : initials[0];
     };
 
-    const initials = getInitials(email.email);
+    const initials = getInitials(email);
 
     return (
       <>
