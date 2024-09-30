@@ -103,7 +103,7 @@ export const Links = () => {
               <PaginationItem>
                 <PaginationPrevious
                   onClick={() => {
-                    if (page > 0) setPage(page - 1);
+                    if (page > 1) setPage(page - 1);
                   }}
                 />
               </PaginationItem>

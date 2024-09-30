@@ -26,14 +26,12 @@ const registerSchema = z.object({
     .refine((email) => email.endsWith("@dlsu.edu.ph"), {
       message: "Email must end with '@dlsu.edu.ph'",
     }),
-  password: z.string(),
+  password: z.string().min(8, "Password must be at least 8 characters long"),
 });
 
 export const Register = () => {
-  const [currentUser, setCurrentUser] = useCookies(["currentUser"]);
-  console.log(currentUser);
-  const [currentToken, setCurrentToken] = useCookies(["currentToken"]);
-  console.log(currentToken);
+  const [, setCurrentUser] = useCookies(["currentUser"]);
+  const [, setCurrentToken] = useCookies(["currentToken"]);
 
   const form = useForm<z.infer<typeof registerSchema>>({
     resolver: zodResolver(registerSchema),
@@ -55,11 +53,10 @@ export const Register = () => {
             },
           }
         );
+        console.log(response.data);
         if (response.data.status == "success") {
-          window.location.replace("/");
+          window.location.replace("/accessAccount");
         }
-        setCurrentUser("currentUser", response.data.user, { path: "/" });
-        setCurrentToken("currentToken", response.data.token, { path: "/" });
       } catch (e) {
         console.log(e);
       }
@@ -110,14 +107,16 @@ export const Register = () => {
                         className="text-black"
                       />
                     </FormControl>
-                    <FormDescription>Input Password</FormDescription>
+                    <FormDescription>
+                      Password must be at least 8 characters long
+                    </FormDescription>
                     <FormMessage />
                   </FormItem>
                 </>
               )}
             />
             <Button type="submit" className="bg-[#F8FAFC] text-black">
-              LogIn
+              Register
             </Button>
           </form>
         </Form>

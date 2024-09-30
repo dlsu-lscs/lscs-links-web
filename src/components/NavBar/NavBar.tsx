@@ -3,6 +3,8 @@ import {
   NavigationMenuItem,
   NavigationMenuList,
   NavigationMenuTrigger,
+  NavigationMenuContent,
+  NavigationMenuLink,
 } from "@/components/ui/navigation-menu";
 
 import lscs_white from "../../assets/lscs_white.png";
@@ -58,6 +60,26 @@ export const NavBar = () => {
               </NavigationMenuList>
             </NavigationMenu>
           </div>
+          {/* <NavigationMenu>
+            <NavigationMenuList className="bg-[#1D283A] rounded-lg">
+              <NavigationMenuItem>
+                <NavigationMenuTrigger className="bg-[#1D283A]  hover:bg-[#333] hover:text-white">
+                  <Link to="/">Link Shortener</Link>
+                </NavigationMenuTrigger>
+                <NavigationMenuContent></NavigationMenuContent>
+              </NavigationMenuItem>
+              <NavigationMenuItem>
+                <NavigationMenuTrigger className="bg-[#1D283A]">
+                  Other Applications
+                </NavigationMenuTrigger>
+                <NavigationMenuContent>
+                  <div className="flex flex-col p-8  bg-[#030711] border-2 border-[#1D283A] rounded-lg text-white">
+                    <a href>DocuSeal</a>
+                  </div>
+                </NavigationMenuContent>
+              </NavigationMenuItem>
+            </NavigationMenuList>
+          </NavigationMenu> */}
           <Link to="/accessAccount">
             {"currentToken" in currentToken ? (
               <UserIcon email={user.email}></UserIcon>

@@ -18,6 +18,7 @@ import {
 import { Input } from "@/components/ui/input";
 
 import { useCookies } from "react-cookie";
+import { useState } from "react";
 
 const loginSchema = z.object({
   email: z
@@ -30,10 +31,9 @@ const loginSchema = z.object({
 });
 
 export const LogIn = () => {
-  const [currentUser, setCurrentUser] = useCookies(["currentUser"]);
-  console.log(currentUser);
-  const [currentToken, setCurrentToken] = useCookies(["currentToken"]);
-  console.log(currentToken);
+  const [, setCurrentUser] = useCookies(["currentUser"]);
+  const [, setCurrentToken] = useCookies(["currentToken"]);
+  const [error, setError] = useState(null);
 
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
@@ -59,9 +59,11 @@ export const LogIn = () => {
           window.location.replace("/");
         }
         setCurrentUser("currentUser", response.data.user, { path: "/" });
+        console.log(response.data.token);
         setCurrentToken("currentToken", response.data.token, { path: "/" });
       } catch (e) {
         console.log(e);
+        setError(e.response.data.error);
       }
     };
     postData();
@@ -78,7 +80,7 @@ export const LogIn = () => {
             <FormField
               control={form.control}
               name="email"
-              render={({ field }) => (
+              render={({ field, fieldState: { error } }) => (
                 <>
                   <FormItem>
                     <FormLabel>Email</FormLabel>
@@ -98,7 +100,7 @@ export const LogIn = () => {
             <FormField
               control={form.control}
               name="password"
-              render={({ field }) => (
+              render={({ field, fieldState: { error } }) => (
                 <>
                   <FormItem>
                     <FormLabel>Password</FormLabel>
@@ -116,6 +118,7 @@ export const LogIn = () => {
                 </>
               )}
             />
+            {error ? <p className="text-red-500">{error}</p> : null}
             <Button type="submit" className="bg-[#F8FAFC] text-black">
               LogIn
             </Button>
