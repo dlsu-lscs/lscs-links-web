@@ -39,7 +39,6 @@ export const Links = () => {
   const fetchedData: Data | null = data as Data | null;
 
   const totalPage = fetchedData?.totalPages ?? 1;
-  console.log(data);
 
   if (error == 403) {
     removeCurrentToken("currentToken");
@@ -100,27 +99,31 @@ export const Links = () => {
             );
           })}
         </ScrollArea>
-        <div className="flex justify-center">
-          <Pagination>
-            <PaginationContent>
-              <PaginationItem>
-                <PaginationPrevious
-                  onClick={() => {
-                    if (page > 1) setPage(page - 1);
-                  }}
-                />
-              </PaginationItem>
-              <PaginationItem>
-                <PaginationNext
-                  onClick={() => {
-                    if (page < totalPage) setPage(page + 1);
-                  }}
-                />
-              </PaginationItem>
-            </PaginationContent>
-          </Pagination>
-        </div>
-        <p>Page: {page}</p>
+        {fetchedData?.data.length != 0 ? (
+          <>
+            <div className="flex justify-center">
+              <Pagination>
+                <PaginationContent>
+                  <PaginationItem>
+                    <PaginationPrevious
+                      onClick={() => {
+                        if (page > 1) setPage(page - 1);
+                      }}
+                    />
+                  </PaginationItem>
+                  <PaginationItem>
+                    <PaginationNext
+                      onClick={() => {
+                        if (page < totalPage) setPage(page + 1);
+                      }}
+                    />
+                  </PaginationItem>
+                </PaginationContent>
+              </Pagination>
+            </div>
+            <p>Page: {page}</p>
+          </>
+        ) : null}
       </div>
     </>
   );
