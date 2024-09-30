@@ -17,8 +17,6 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 
-import { useCookies } from "react-cookie";
-
 const registerSchema = z.object({
   email: z
     .string()
@@ -30,9 +28,6 @@ const registerSchema = z.object({
 });
 
 export const Register = () => {
-  const [, setCurrentUser] = useCookies(["currentUser"]);
-  const [, setCurrentToken] = useCookies(["currentToken"]);
-
   const form = useForm<z.infer<typeof registerSchema>>({
     resolver: zodResolver(registerSchema),
     defaultValues: {

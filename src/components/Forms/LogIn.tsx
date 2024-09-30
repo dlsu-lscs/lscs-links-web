@@ -61,9 +61,14 @@ export const LogIn = () => {
         setCurrentUser("currentUser", response.data.user, { path: "/" });
         console.log(response.data.token);
         setCurrentToken("currentToken", response.data.token, { path: "/" });
-      } catch (e) {
+      } catch (e: unknown) {
+        const error =
+          (e as any)?.response?.data?.error ||
+          (e as Error)?.message ||
+          "An unknown error occurred";
+
         console.log(e);
-        setError(e.response.data.error);
+        setError(error);
       }
     };
     postData();

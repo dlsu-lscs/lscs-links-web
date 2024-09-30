@@ -3,8 +3,8 @@ import {
   NavigationMenuItem,
   NavigationMenuList,
   NavigationMenuTrigger,
-  NavigationMenuContent,
-  NavigationMenuLink,
+  // NavigationMenuContent,
+  // NavigationMenuLink,
 } from "@/components/ui/navigation-menu";
 
 import lscs_white from "../../assets/lscs_white.png";
