@@ -19,6 +19,7 @@ export const NavBar = () => {
   const user = currentUser.currentUser;
 
   const [currentToken, ,] = useCookies(["currentToken"]);
+  console.log(currentToken.currentToken);
 
   return (
     <>
@@ -31,35 +32,39 @@ export const NavBar = () => {
           </div>
         </Link>
         <div className="flex space-x-8">
-          <div className="flex bg-[#1D283A] rounded-lg">
-            <NavigationMenu>
-              <NavigationMenuList>
-                <NavigationMenuItem>
-                  <NavigationMenuTrigger className="bg-[#1D283A]">
-                    <Link to="/">Link Shortener</Link>
-                  </NavigationMenuTrigger>
-                </NavigationMenuItem>
-              </NavigationMenuList>
-            </NavigationMenu>
-            <NavigationMenu>
-              <NavigationMenuList>
-                <NavigationMenuItem>
-                  <NavigationMenuTrigger className="bg-[#1D283A]">
-                    Analytics
-                  </NavigationMenuTrigger>
-                </NavigationMenuItem>
-              </NavigationMenuList>
-            </NavigationMenu>
-            <NavigationMenu>
-              <NavigationMenuList>
-                <NavigationMenuItem>
-                  <NavigationMenuTrigger className="bg-[#1D283A]">
-                    Other Applications
-                  </NavigationMenuTrigger>
-                </NavigationMenuItem>
-              </NavigationMenuList>
-            </NavigationMenu>
-          </div>
+          {"currentToken" in currentToken ? (
+            <>
+              <div className="flex bg-[#1D283A] rounded-lg">
+                <NavigationMenu>
+                  <NavigationMenuList>
+                    <NavigationMenuItem>
+                      <NavigationMenuTrigger className="bg-[#1D283A]">
+                        <Link to="/">Link Shortener</Link>
+                      </NavigationMenuTrigger>
+                    </NavigationMenuItem>
+                  </NavigationMenuList>
+                </NavigationMenu>
+                <NavigationMenu>
+                  <NavigationMenuList>
+                    <NavigationMenuItem>
+                      <NavigationMenuTrigger className="bg-[#1D283A]">
+                        Analytics
+                      </NavigationMenuTrigger>
+                    </NavigationMenuItem>
+                  </NavigationMenuList>
+                </NavigationMenu>
+                <NavigationMenu>
+                  <NavigationMenuList>
+                    <NavigationMenuItem>
+                      <NavigationMenuTrigger className="bg-[#1D283A]">
+                        Other Applications
+                      </NavigationMenuTrigger>
+                    </NavigationMenuItem>
+                  </NavigationMenuList>
+                </NavigationMenu>
+              </div>
+            </>
+          ) : null}
           {/* <NavigationMenu>
             <NavigationMenuList className="bg-[#1D283A] rounded-lg">
               <NavigationMenuItem>
