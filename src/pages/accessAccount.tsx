@@ -7,7 +7,7 @@ export const AccessAccount = () => {
   return (
     <>
       <div className="min-h-screen bg-[#000000] text-white px-28 py-8">
-        <div className="flex flex-col items-center justify-center space-y-12">
+        <div className="flex flex-col items-center justify-center space-y-6">
           <Tabs
             defaultValue="logIn"
             className="w-[400px] flex flex-col items-center space-y-10"
