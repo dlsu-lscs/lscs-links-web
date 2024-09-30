@@ -73,7 +73,7 @@ export const LogIn = () => {
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-            className="space-y-8 bg-[#030711] border-2 border-[#1D283A] rounded-lg p-6 flex flex-col"
+            className="space-y-8 bg-[#030711] border-2 border-[#1D283A] rounded-lg px-24 py-12 flex flex-col"
           >
             <FormField
               control={form.control}
@@ -81,7 +81,7 @@ export const LogIn = () => {
               render={({ field }) => (
                 <>
                   <FormItem>
-                    <FormLabel>Email</FormLabel>
+                    <FormLabel className="text-lg">Email</FormLabel>
                     <FormControl>
                       <Input
                         placeholder="juan_delacruz@dlsu.edu.ph"
@@ -101,7 +101,7 @@ export const LogIn = () => {
               render={({ field }) => (
                 <>
                   <FormItem>
-                    <FormLabel>Password</FormLabel>
+                    <FormLabel className="text-lg">Password</FormLabel>
                     <FormControl>
                       <Input
                         type="password"
@@ -116,7 +116,7 @@ export const LogIn = () => {
                 </>
               )}
             />
-            <Button type="submit" className="bg-[#F8FAFC] text-black">
+            <Button type="submit" className="bg-[#F8FAFC] text-black text-lg">
               LogIn
             </Button>
           </form>
