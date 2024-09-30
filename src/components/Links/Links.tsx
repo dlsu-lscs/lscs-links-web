@@ -20,6 +20,7 @@ type LinkData = {
   longlink: string;
   shortlink: string;
   qr_preview: string;
+  qr_download: string;
 };
 
 type Data = {
@@ -38,6 +39,7 @@ export const Links = () => {
   const fetchedData: Data | null = data as Data | null;
 
   const totalPage = fetchedData?.totalPages ?? 1;
+  console.log(data);
 
   if (error == 403) {
     removeCurrentToken("currentToken");
@@ -91,7 +93,8 @@ export const Links = () => {
                   createdBy={link.created_by}
                   longLink={link.longlink}
                   shortLink={link.shortlink}
-                  qr={link.qr_preview}
+                  qr_preview={link.qr_preview}
+                  qr_download={link.qr_download}
                 ></Link>
               </>
             );

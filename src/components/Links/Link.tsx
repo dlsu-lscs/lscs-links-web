@@ -10,7 +10,8 @@ type linkData = {
   createdBy: string;
   longLink: string;
   shortLink: string;
-  qr: string;
+  qr_preview: string;
+  qr_download: string;
 };
 
 type countData = {
@@ -24,7 +25,8 @@ export const Link = ({
   createdBy,
   longLink,
   shortLink,
-  qr,
+  qr_preview,
+  qr_download,
 }: linkData) => {
   const [currentToken] = useCookies(["currentToken"]);
   const token = currentToken.currentToken;
@@ -34,7 +36,6 @@ export const Link = ({
   );
 
   const fetchedData: countData | null = data as countData | null;
-  console.log(fetchedData);
 
   if (loading) {
     return (
@@ -101,11 +102,11 @@ export const Link = ({
             </div>
           </div>
           <div className="px-8">
-            {qr ? (
+            {qr_preview ? (
               <>
                 <div className="flex justify-center flex-col items-center space-y-3">
-                  <img src={qr} className="rounded-md w-32" alt="" />
-                  <a href={qr} className="underline text-[#7F8EA3]">
+                  <img src={qr_preview} className="rounded-md w-32" alt="" />
+                  <a href={qr_download} className="underline text-[#7F8EA3]">
                     Download
                   </a>
                 </div>
