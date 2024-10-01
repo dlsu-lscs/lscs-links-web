@@ -3,8 +3,8 @@ import {
   NavigationMenuItem,
   NavigationMenuList,
   NavigationMenuTrigger,
-  // NavigationMenuContent,
-  // NavigationMenuLink,
+  NavigationMenuContent,
+  NavigationMenuLink,
 } from "@/components/ui/navigation-menu";
 
 import lscs_white from "../../assets/lscs_white.png";
@@ -38,13 +38,15 @@ export const NavBar = () => {
                 <NavigationMenu>
                   <NavigationMenuList>
                     <NavigationMenuItem>
-                      <NavigationMenuTrigger className="bg-[#1D283A]">
-                        <Link to="/">Link Shortener</Link>
-                      </NavigationMenuTrigger>
+                      <NavigationMenuLink>
+                        <NavigationMenuTrigger className="bg-[#1D283A]">
+                          <Link to="/">Link Shortener</Link>
+                        </NavigationMenuTrigger>
+                      </NavigationMenuLink>
                     </NavigationMenuItem>
                   </NavigationMenuList>
                 </NavigationMenu>
-                <NavigationMenu>
+                {/* <NavigationMenu>
                   <NavigationMenuList>
                     <NavigationMenuItem>
                       <NavigationMenuTrigger className="bg-[#1D283A]">
@@ -52,13 +54,16 @@ export const NavBar = () => {
                       </NavigationMenuTrigger>
                     </NavigationMenuItem>
                   </NavigationMenuList>
-                </NavigationMenu>
+                </NavigationMenu> */}
                 <NavigationMenu>
                   <NavigationMenuList>
                     <NavigationMenuItem>
                       <NavigationMenuTrigger className="bg-[#1D283A]">
                         Other Applications
                       </NavigationMenuTrigger>
+                      {/* <NavigationMenuContent className="bg-transparent"> */}
+                      {/*   DocuSeal */}
+                      {/* </NavigationMenuContent> */}
                     </NavigationMenuItem>
                   </NavigationMenuList>
                 </NavigationMenu>
