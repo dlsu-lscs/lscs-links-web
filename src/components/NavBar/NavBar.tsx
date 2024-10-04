@@ -7,6 +7,15 @@ import {
   NavigationMenuLink,
 } from "@/components/ui/navigation-menu";
 
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+
 import lscs_white from "../../assets/lscs_white.png";
 
 import { UserIcon } from "@/components/User_Icon/UserIcon";
@@ -18,7 +27,7 @@ export const NavBar = () => {
   const [currentUser] = useCookies(["currentUser"]);
   const user = currentUser.currentUser;
 
-  const [currentToken, ,] = useCookies(["currentToken"]);
+  const [currentToken, , removeCurrentToken] = useCookies(["currentToken"]);
 
   return (
     <>
@@ -89,13 +98,26 @@ export const NavBar = () => {
               </NavigationMenuItem>
             </NavigationMenuList>
           </NavigationMenu> */}
-          <Link to="/accessAccount">
-            {"currentToken" in currentToken ? (
-              <UserIcon email={user.email}></UserIcon>
-            ) : (
-              <UserIcon email={""}></UserIcon>
-            )}
-          </Link>
+          {"currentToken" in currentToken ? (
+            <DropdownMenu>
+              <DropdownMenuTrigger>
+                <UserIcon email={user.email}></UserIcon>{" "}
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className=" bg-[#030711] border-2 border-[#1D283A] rounded-lg text-white">
+                <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                <DropdownMenuSeparator className="bg-[#030711]" />
+                <DropdownMenuItem
+                  onClick={() => {
+                    removeCurrentToken("currentToken");
+                  }}
+                >
+                  Logout
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          ) : (
+            <UserIcon email={""}></UserIcon>
+          )}
         </div>
       </header>
     </>
