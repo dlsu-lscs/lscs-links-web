@@ -32,16 +32,22 @@ export const Links = () => {
   const [currentToken, , removeCurrentToken] = useCookies(["currentToken"]);
 
   const [page, setPage] = useState(1);
-  const { data, loading, error } = useFetch(
+  const { data, loading, error, errorCode } = useFetch(
     "https://lscs.info/admin/links?limit=10&page=" + page,
     currentToken.currentToken
   );
+  console.log(error);
   const fetchedData: Data | null = data as Data | null;
 
   const totalPage = fetchedData?.totalPages ?? 1;
 
-  if (error == 403) {
-    removeCurrentToken("currentToken");
+  if (error) {
+    if (errorCode == 403) removeCurrentToken("currentToken");
+    return (
+      <>
+        <p>Error {error.message}</p>
+      </>
+    );
   }
 
   if (loading) {

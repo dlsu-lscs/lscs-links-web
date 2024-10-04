@@ -19,7 +19,6 @@ export const NavBar = () => {
   const user = currentUser.currentUser;
 
   const [currentToken, ,] = useCookies(["currentToken"]);
-  console.log(currentToken.currentToken);
 
   return (
     <>
