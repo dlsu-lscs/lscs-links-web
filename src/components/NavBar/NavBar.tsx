@@ -112,46 +112,48 @@ export const NavBar = () => {
             <UserIcon email={""}></UserIcon>
           )}
         </div>
-        <div className="flex md:hidden">
-          <Menubar className="bg-[#030711] border-2 border-[#1D283A] rounded-lg">
-            <MenubarMenu>
-              <MenubarTrigger>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={1.5}
-                  stroke="currentColor"
-                  className="size-6"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
-                  />
-                </svg>
-              </MenubarTrigger>
-              <MenubarContent className="bg-[#030711] border-2 border-[#1D283A] rounded-lg text-white">
-                <MenubarItem>
-                  <Link to="/">Link Shortener</Link>
-                </MenubarItem>
-                <MenubarSeparator />
-                <MenubarItem>
-                  <Link to="">DocuSeal</Link>
-                </MenubarItem>
-                <MenubarSeparator />
-                <MenubarItem>{user.email}</MenubarItem>
-                <MenubarItem
-                  onClick={() => {
-                    removeCurrentToken("currentToken");
-                  }}
-                >
-                  Log-Out
-                </MenubarItem>
-              </MenubarContent>
-            </MenubarMenu>
-          </Menubar>
-        </div>
+        {"currentToken" in currentToken ? (
+          <div className="flex md:hidden">
+            <Menubar className="bg-[#030711] border-2 border-[#1D283A] rounded-lg">
+              <MenubarMenu>
+                <MenubarTrigger>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={1.5}
+                    stroke="currentColor"
+                    className="size-6"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
+                    />
+                  </svg>
+                </MenubarTrigger>
+                <MenubarContent className="bg-[#030711] border-2 border-[#1D283A] rounded-lg text-white">
+                  <MenubarItem>
+                    <Link to="/">Link Shortener</Link>
+                  </MenubarItem>
+                  <MenubarSeparator />
+                  <MenubarItem>
+                    <Link to="">DocuSeal</Link>
+                  </MenubarItem>
+                  <MenubarSeparator />
+                  <MenubarItem>{user.email}</MenubarItem>
+                  <MenubarItem
+                    onClick={() => {
+                      removeCurrentToken("currentToken");
+                    }}
+                  >
+                    Log Out
+                  </MenubarItem>
+                </MenubarContent>
+              </MenubarMenu>
+            </Menubar>
+          </div>
+        ) : null}
       </header>
     </>
   );
