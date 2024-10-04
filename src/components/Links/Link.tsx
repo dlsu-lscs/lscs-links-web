@@ -47,7 +47,7 @@ export const Link = ({
   return (
     <>
       <div className="mb-6">
-        <div className="flex justify-between mb-6">
+        <div className="flex flex-wrap justify-between mb-6">
           <div>
             <div className="flex items-center space-x-3">
               <h1
@@ -101,7 +101,7 @@ export const Link = ({
               <p>Created by {createdBy}</p>
             </div>
           </div>
-          <div className="px-8">
+          <div className="mx-4 mt-8 md:mt-0 md:px-8">
             {qr_preview ? (
               <>
                 <div className="flex justify-center flex-col items-center space-y-3">

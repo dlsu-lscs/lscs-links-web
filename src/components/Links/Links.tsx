@@ -36,7 +36,6 @@ export const Links = () => {
     "https://lscs.info/admin/links?limit=10&page=" + page,
     currentToken.currentToken
   );
-  console.log(error);
   const fetchedData: Data | null = data as Data | null;
 
   const totalPage = fetchedData?.totalPages ?? 1;
@@ -88,8 +87,8 @@ export const Links = () => {
 
   return (
     <>
-      <div className="flex justify-center flex-col items-center space-y-3">
-        <ScrollArea className="h-[400px] w-[720px] rounded-md  space-y-3">
+      <div className="flex md:justify-center flex-col items-center space-y-3">
+        <ScrollArea className="md:h-[400px] md:w-[720px] rounded-md  space-y-3">
           {fetchedData?.data.map((link) => {
             return (
               <>
@@ -105,7 +104,7 @@ export const Links = () => {
             );
           })}
         </ScrollArea>
-        {fetchedData?.data.length != 0 ? (
+        {fetchedData?.data.length != 0 && totalPage > 1 ? (
           <>
             <div className="flex justify-center">
               <Pagination>

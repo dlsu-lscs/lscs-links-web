@@ -26,8 +26,8 @@ export const LinkShortener = () => {
 
   return (
     <>
-      <div className="min-h-screen bg-[#000000] text-white px-28 py-8">
-        <div className="flex items-end space-x-5">
+      <div className="min-h-screen bg-[#000000] text-white md:px-28 py-8">
+        <div className="flex flex-wrap items-end space-x-5 space-y-6">
           <h1 className="font-bold text-4xl">Shortened Links</h1>
           <CreateLink></CreateLink>
           <Select>

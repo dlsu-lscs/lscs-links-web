@@ -80,7 +80,7 @@ export const LogIn = () => {
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-            className="space-y-8 bg-[#030711] border-2 border-[#1D283A] rounded-lg px-24 py-12 flex flex-col"
+            className="space-y-8 bg-[#030711] border-2 border-[#1D283A] rounded-lg md:px-24 py-12 px-12  flex flex-col"
           >
             <FormField
               control={form.control}

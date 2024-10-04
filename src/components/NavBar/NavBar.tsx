@@ -16,6 +16,15 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
+import {
+  Menubar,
+  MenubarContent,
+  MenubarItem,
+  MenubarMenu,
+  MenubarSeparator,
+  MenubarTrigger,
+} from "@/components/ui/menubar";
+
 import lscs_white from "../../assets/lscs_white.png";
 
 import { UserIcon } from "@/components/User_Icon/UserIcon";
@@ -31,18 +40,22 @@ export const NavBar = () => {
 
   return (
     <>
-      <header className="bg-[black] text-[#FFFFFF] flex justify-between items-center px-8 py-4">
-        <Link to="/" className="flex items-center space-x-3">
-          <img src={lscs_white} alt="" className="w-20" />
+      <header className="bg-[black] text-[#FFFFFF] flex justify-between items-center px-2 md:px-8 py-4">
+        <Link to="/" className="flex items-center space-x-1 md:space-x-3">
+          <img src={lscs_white} alt="" className="w-12 md:w-20" />
           <div>
-            <h1 className="font-bold text-3xl">Research and Development</h1>
-            <p>39th La Salle Computer Society</p>
+            <h1 className="font-bold text-md md:text-3xl">
+              Research and Development
+            </h1>
+            <p className="text-xs md:text-base">
+              39th La Salle Computer Society
+            </p>
           </div>
         </Link>
-        <div className="flex space-x-8">
+        <div className="hidden md:flex space-x-8">
           {"currentToken" in currentToken ? (
             <>
-              <div className="flex bg-[#1D283A] rounded-lg">
+              <div className="hidden md:flex bg-[#1D283A] rounded-lg">
                 <NavigationMenu>
                   <NavigationMenuList>
                     <NavigationMenuItem>
@@ -78,26 +91,6 @@ export const NavBar = () => {
               </div>
             </>
           ) : null}
-          {/* <NavigationMenu>
-            <NavigationMenuList className="bg-[#1D283A] rounded-lg">
-              <NavigationMenuItem>
-                <NavigationMenuTrigger className="bg-[#1D283A]  hover:bg-[#333] hover:text-white">
-                  <Link to="/">Link Shortener</Link>
-                </NavigationMenuTrigger>
-                <NavigationMenuContent></NavigationMenuContent>
-              </NavigationMenuItem>
-              <NavigationMenuItem>
-                <NavigationMenuTrigger className="bg-[#1D283A]">
-                  Other Applications
-                </NavigationMenuTrigger>
-                <NavigationMenuContent>
-                  <div className="flex flex-col p-8  bg-[#030711] border-2 border-[#1D283A] rounded-lg text-white">
-                    <a href>DocuSeal</a>
-                  </div>
-                </NavigationMenuContent>
-              </NavigationMenuItem>
-            </NavigationMenuList>
-          </NavigationMenu> */}
           {"currentToken" in currentToken ? (
             <DropdownMenu>
               <DropdownMenuTrigger>
@@ -118,6 +111,46 @@ export const NavBar = () => {
           ) : (
             <UserIcon email={""}></UserIcon>
           )}
+        </div>
+        <div className="flex md:hidden">
+          <Menubar className="bg-[#030711] border-2 border-[#1D283A] rounded-lg">
+            <MenubarMenu>
+              <MenubarTrigger>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  className="size-6"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
+                  />
+                </svg>
+              </MenubarTrigger>
+              <MenubarContent className="bg-[#030711] border-2 border-[#1D283A] rounded-lg text-white">
+                <MenubarItem>
+                  <Link to="/">Link Shortener</Link>
+                </MenubarItem>
+                <MenubarSeparator />
+                <MenubarItem>
+                  <Link to="">DocuSeal</Link>
+                </MenubarItem>
+                <MenubarSeparator />
+                <MenubarItem>{user.email}</MenubarItem>
+                <MenubarItem
+                  onClick={() => {
+                    removeCurrentToken("currentToken");
+                  }}
+                >
+                  Log-Out
+                </MenubarItem>
+              </MenubarContent>
+            </MenubarMenu>
+          </Menubar>
         </div>
       </header>
     </>
