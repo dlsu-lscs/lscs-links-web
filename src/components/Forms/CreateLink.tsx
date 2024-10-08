@@ -90,12 +90,22 @@ export const CreateLink = () => {
                     <>
                       <FormItem>
                         <FormLabel className="text-white">Short Link</FormLabel>
-                        <FormControl>
-                          <Input
-                            {...field}
-                            className="text-white bg-[#030711] border-2 border-[#1D283A] rounded-lg"
-                          />
-                        </FormControl>
+                        <div className="flex space-x-1">
+                          <FormControl>
+                            <Input
+                              {...field}
+                              disabled
+                              value={"lscs.info/"}
+                              className="text-white bg-[#333437] border-2 border-[#1D283A] rounded-l-lg w-1/4"
+                            />
+                          </FormControl>
+                          <FormControl>
+                            <Input
+                              {...field}
+                              className="text-white bg-[#030711] border-2 border-[#1D283A] rounded-lg"
+                            />
+                          </FormControl>
+                        </div>
                         <FormMessage />
                       </FormItem>
                     </>
