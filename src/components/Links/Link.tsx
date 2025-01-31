@@ -6,120 +6,120 @@ import { Separator } from "../ui/separator";
 import { useFetch } from "@/hooks/useFetch";
 
 type linkData = {
-  linkID: string;
-  createdBy: string;
-  longLink: string;
-  shortLink: string;
-  qr_preview: string;
-  qr_download: string;
+    linkID: string;
+    createdBy: string;
+    longLink: string;
+    shortLink: string;
+    qr_preview: string;
+    qr_download: string;
 };
 
 type countData = {
-  count: number;
+    count: number;
 };
 
 import { useCookies } from "react-cookie";
 
 export const Link = ({
-  linkID,
-  createdBy,
-  longLink,
-  shortLink,
-  qr_preview,
-  qr_download,
+    linkID,
+    createdBy,
+    longLink,
+    shortLink,
+    qr_preview,
+    qr_download,
 }: linkData) => {
-  //Constant URI LINK
-  const URLLINK =
-    process.env.REACT_APP_LINKS_URL || "https://linksapidev.app.dlsu-lscs.org";
+    //Constant URI LINK
+    const URLLINK =
+        import.meta.env.REACT_APP_LINKS_URL || "https://linksapidev.app.dlsu-lscs.org";
 
-  const [currentLinksToken] = useCookies(["currentLinksToken"]);
-  const token = currentLinksToken.currentLinksToken;
-  const { data, loading } = useFetch(
-    `${URLLINK}/analytics/${shortLink}`,
-    token
-  );
-
-  const fetchedData: countData | null = data as countData | null;
-
-  if (loading) {
-    return (
-      <>
-        <p className="text-white"></p>
-      </>
+    const [currentLinksToken] = useCookies(["currentLinksToken"]);
+    const token = currentLinksToken.currentLinksToken;
+    const { data, loading } = useFetch(
+        `${URLLINK}/analytics/${shortLink}`,
+        token
     );
-  }
-  return (
-    <>
-      <div className="mb-6">
-        <div className="flex flex-wrap justify-between mb-6">
-          <div>
-            <div className="flex items-center space-x-3">
-              <h1
-                className="text-2xl cursor-pointer"
-                onClick={async () => {
-                  try {
-                    await navigator.clipboard.writeText(
-                      `lscs.info/${shortLink}`
-                    );
-                  } catch (e) {
-                    console.log(e);
-                  }
-                }}
-              >
-                <span className="font-bold">lscs.info</span>/{shortLink}
-              </h1>
-              <EditLink linkID={linkID}></EditLink>
-              <Badge className="text-black bg-white font-bold">rnd</Badge>
-            </div>
-            <div className="text-slate-500 flex items-center space-x-2 mt-1">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={1.5}
-                stroke="currentColor"
-                className="size-6"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M13.19 8.688a4.5 4.5 0 0 1 1.242 7.244l-4.5 4.5a4.5 4.5 0 0 1-6.364-6.364l1.757-1.757m13.35-.622 1.757-1.757a4.5 4.5 0 0 0-6.364-6.364l-4.5 4.5a4.5 4.5 0 0 0 1.242 7.244"
-                />
-              </svg>
-              <p
-                className="text-xl cursor-pointer	"
-                onClick={async () => {
-                  try {
-                    await navigator.clipboard.writeText(longLink);
-                  } catch (e) {
-                    console.log(e);
-                  }
-                }}
-              >
-                {longLink}
-              </p>
-            </div>
-            <div className="my-3">{fetchedData?.count ?? 0} clicks</div>
-            <div className="flex items-center space-x-3 my-3">
-              <UserIcon email={createdBy}></UserIcon>
-              <p>Created by {createdBy}</p>
-            </div>
-          </div>
-          <div className="mx-4 mt-8 md:mt-0 md:px-8">
-            {qr_preview ? (
-              <>
-                <div className="flex justify-center flex-col items-center space-y-3">
-                  <img src={qr_preview} className="rounded-md w-32" alt="" />
-                  <a href={qr_download} className="underline text-[#7F8EA3]">
-                    Download
-                  </a>
+
+    const fetchedData: countData | null = data as countData | null;
+
+    if (loading) {
+        return (
+            <>
+                <p className="text-white"></p>
+            </>
+        );
+    }
+    return (
+        <>
+            <div className="mb-6">
+                <div className="flex flex-wrap justify-between mb-6">
+                    <div>
+                        <div className="flex items-center space-x-3">
+                            <h1
+                                className="text-2xl cursor-pointer"
+                                onClick={async () => {
+                                    try {
+                                        await navigator.clipboard.writeText(
+                                            `lscs.info/${shortLink}`
+                                        );
+                                    } catch (e) {
+                                        console.log(e);
+                                    }
+                                }}
+                            >
+                                <span className="font-bold">lscs.info</span>/{shortLink}
+                            </h1>
+                            <EditLink linkID={linkID}></EditLink>
+                            <Badge className="text-black bg-white font-bold">rnd</Badge>
+                        </div>
+                        <div className="text-slate-500 flex items-center space-x-2 mt-1">
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                strokeWidth={1.5}
+                                stroke="currentColor"
+                                className="size-6"
+                            >
+                                <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    d="M13.19 8.688a4.5 4.5 0 0 1 1.242 7.244l-4.5 4.5a4.5 4.5 0 0 1-6.364-6.364l1.757-1.757m13.35-.622 1.757-1.757a4.5 4.5 0 0 0-6.364-6.364l-4.5 4.5a4.5 4.5 0 0 0 1.242 7.244"
+                                />
+                            </svg>
+                            <p
+                                className="text-xl cursor-pointer	"
+                                onClick={async () => {
+                                    try {
+                                        await navigator.clipboard.writeText(longLink);
+                                    } catch (e) {
+                                        console.log(e);
+                                    }
+                                }}
+                            >
+                                {longLink}
+                            </p>
+                        </div>
+                        <div className="my-3">{fetchedData?.count ?? 0} clicks</div>
+                        <div className="flex items-center space-x-3 my-3">
+                            <UserIcon email={createdBy}></UserIcon>
+                            <p>Created by {createdBy}</p>
+                        </div>
+                    </div>
+                    <div className="mx-4 mt-8 md:mt-0 md:px-8">
+                        {qr_preview ? (
+                            <>
+                                <div className="flex justify-center flex-col items-center space-y-3">
+                                    <img src={qr_preview} className="rounded-md w-32" alt="" />
+                                    <a href={qr_download} className="underline text-[#7F8EA3]">
+                                        Download
+                                    </a>
+                                </div>
+                            </>
+                        ) : null}
+                    </div>
                 </div>
-              </>
-            ) : null}
-          </div>
-        </div>
-        <Separator className="bg-[#1D283A] my-2`" />
-      </div>
-    </>
-  );
+                <Separator className="bg-[#1D283A] my-2`" />
+            </div>
+        </>
+    );
 };

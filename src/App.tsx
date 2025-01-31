@@ -5,22 +5,22 @@ import { GoogleOAuthProvider } from "@react-oauth/google";
 import { Toaster } from "@/components/ui/toaster";
 
 const App = () => {
-  const clientID =
-    (process.env.REACT_APP_CLIENT_ID as string) ||
-    "631323246333-a20r4lll1rs1k93viaobh6f2neushf2t.apps.googleusercontent.com";
+    const clientID =
+        (import.meta.env.REACT_APP_CLIENT_ID as string) ||
+        "631323246333-a20r4lll1rs1k93viaobh6f2neushf2t.apps.googleusercontent.com";
 
-  return (
-    <>
-      <CookiesProvider>
-        <GoogleOAuthProvider clientId={clientID}>
-          <Router>
-            <Layout></Layout>
-            <Toaster />
-          </Router>
-        </GoogleOAuthProvider>
-      </CookiesProvider>
-    </>
-  );
+    return (
+        <>
+            <CookiesProvider>
+                <GoogleOAuthProvider clientId={clientID}>
+                    <Router>
+                        <Layout></Layout>
+                        <Toaster />
+                    </Router>
+                </GoogleOAuthProvider>
+            </CookiesProvider>
+        </>
+    );
 };
 
 export default App;
