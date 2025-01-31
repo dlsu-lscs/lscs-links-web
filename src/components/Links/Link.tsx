@@ -30,7 +30,7 @@ export const Link = ({
 }: linkData) => {
   //Constant URI LINK
   const URLLINK =
-    import.meta.env.VITE_APP_LINKS_URL || "https://linksapidev.app.dlsu-lscs.org";
+    import.meta.env.VITE_APP_LINKS_URL || "https://lscs.info.";
 
   const [currentLinksToken] = useCookies(["currentLinksToken"]);
   const token = currentLinksToken.currentLinksToken;
