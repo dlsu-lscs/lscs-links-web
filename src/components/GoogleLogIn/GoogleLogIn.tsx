@@ -9,7 +9,7 @@ import { useCookies } from "react-cookie";
 export const GoogleLogIn = () => {
   //Constant URI LINK
   const URLLINK =
-    import.meta.env.VITE_APP_LINKS_URL || "https://lscs.info.";
+    import.meta.env.VITE_APP_LINKS_URL || "https://lscs.info";
 
   const [user, setUser] = useState<any>();
   const [, setCurrentUser] = useCookies<string>(["currentUser"]);

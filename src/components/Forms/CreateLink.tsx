@@ -32,7 +32,7 @@ const linkSchema = z.object({
 export const CreateLink = () => {
   //Constant URI LINK
   const URLLINK =
-    import.meta.env.VITE_APP_LINKS_URL || "https://lscs.info.";
+    import.meta.env.VITE_APP_LINKS_URL || "https://lscs.info";
 
   const [currentLinksToken] = useCookies(["currentLinksToken"]);
   const token = currentLinksToken.currentLinksToken;
