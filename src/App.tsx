@@ -6,8 +6,8 @@ import { Toaster } from "@/components/ui/toaster";
 
 const App = () => {
   const clientID =
-    (process.env.REACT_APP_CLIENT_ID as string) ||
-    "631323246333-a20r4lll1rs1k93viaobh6f2neushf2t.apps.googleusercontent.com";
+    (import.meta.env.VITE_APP_CLIENT_ID as string) ||
+    "274365900184-jnvam3k9ce4o4i1bi00c0rmdrqcmtmf9.apps.googleusercontent.com";
 
   return (
     <>

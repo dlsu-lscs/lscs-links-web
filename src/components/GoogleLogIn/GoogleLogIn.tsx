@@ -9,7 +9,7 @@ import { useCookies } from "react-cookie";
 export const GoogleLogIn = () => {
   //Constant URI LINK
   const URLLINK =
-    process.env.REACT_APP_LINKS_URL || "https://linksapidev.app.dlsu-lscs.org";
+    import.meta.env.VITE_APP_LINKS_URL || "https://linksapidev.app.dlsu-lscs.org";
 
   const [user, setUser] = useState<any>();
   const [, setCurrentUser] = useCookies<string>(["currentUser"]);
@@ -68,48 +68,6 @@ export const GoogleLogIn = () => {
           }
         };
 
-        // const checkEmail = async (email: string) => {
-        //   try {
-        //     const response = await axios.post(
-        //       "/auth/check-email",
-        //       { email: email },
-        //       {
-        //         headers: {
-        //           "Content-Type": "application/json",
-        //         },
-        //       }
-        //     );
-        //     if (response.data.state == "present") {
-        //       setCurrentUser("currentUser", email, { path: "/" });
-        //       setCurrentToken("currentToken", user.access_token, { path: "/" });
-        //       getLogin(currentToken.currentToken);
-        //     } else if (response.data.state == "absent") {
-        //       toast({
-        //         variant: "destructive",
-        //         title: "bossing d ka member ng lscs",
-        //         description: "sino ka ba hahahaah",
-        //         action: (
-        //           <ToastAction altText="Try again">
-        //             try mo ulet hehehe
-        //           </ToastAction>
-        //         ),
-        //       });
-        //     }
-        //   } catch (e) {
-        //     console.log(e);
-        //     toast({
-        //       variant: "destructive",
-        //       title: "bossing d ka member ng lscs",
-        //       description: "sino ka ba hahahaah",
-        //       action: (
-        //         <ToastAction altText="Try again">
-        //           try mo ulet hehehe
-        //         </ToastAction>
-        //       ),
-        //     });
-        //   }
-        // };
-        // checkEmail(response.data.email);
         getLogin(user.access_token, response.data.email);
       } catch (e) {
         console.log(e);

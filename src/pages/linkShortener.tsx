@@ -14,6 +14,7 @@ import { CreateLink } from "@/components/Forms/CreateLink";
 import { useCookies } from "react-cookie";
 
 export const LinkShortener = () => {
+  
   const lscsCommittees = [
     { name: "Research and Development", abbreviation: "rnd" },
     { name: "Academics", abbreviation: "acads" },
