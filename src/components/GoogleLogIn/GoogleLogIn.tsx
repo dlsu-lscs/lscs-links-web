@@ -1,30 +1,29 @@
-import { Button } from "@/components/ui/button";
-import { useGoogleLogin } from "@react-oauth/google";
-import { useEffect, useState } from "react";
-import axios from "axios";
-import { useCookies } from "react-cookie";
+import { Button } from '@/components/ui/button'
+import { useGoogleLogin } from '@react-oauth/google'
+import { useEffect, useState } from 'react'
+import axios from 'axios'
+import { useCookies } from 'react-cookie'
 // import { useToast } from "@/hooks/use-toast";
 // import { ToastAction } from "@/components/ui/toast";
 
 export const GoogleLogIn = () => {
   //Constant URI LINK
-  const URLLINK =
-    import.meta.env.VITE_APP_LINKS_URL || "https://lscs.info";
-    
-  const [user, setUser] = useState<any>();
-  const [, setCurrentUser] = useCookies<string>(["currentUser"]);
-  const [, setCurrentToken] = useCookies<string>(["currentToken"]);
-  const [, setCurrentLinksToken] = useCookies<string>(["currentLinksToken"]);
+  const URLLINK = import.meta.env.VITE_APP_LINKS_URL || 'https://lscs.info'
+
+  const [user, setUser] = useState<any>()
+  const [, setCurrentUser] = useCookies<string>(['currentUser'])
+  const [, setCurrentToken] = useCookies<string>(['currentToken'])
+  const [, setCurrentLinksToken] = useCookies<string>(['currentLinksToken'])
 
   const logIn = useGoogleLogin({
     onSuccess: (response) => {
-      setUser(response);
+      setUser(response)
     },
     onError: (error) => {
-      console.log(error);
-      setUser(null);
+      console.log(error)
+      setUser(null)
     },
-  });
+  })
 
   // const { toast } = useToast();
 
@@ -36,10 +35,10 @@ export const GoogleLogIn = () => {
           {
             headers: {
               Authorization: `Bearer ${user.access_token}`,
-              Accept: "application/json",
+              Accept: 'application/json',
             },
           }
-        );
+        )
 
         const getLogin = async (token: string, email: string) => {
           try {
@@ -48,35 +47,32 @@ export const GoogleLogIn = () => {
               { token: token },
               {
                 headers: {
-                  "Content-Type": "application/json",
+                  'Content-Type': 'application/json',
                 },
               }
-            );
-            console.log(response.data);
-            if (response.data.status == "success") {
-              setCurrentLinksToken(
-                "currentLinksToken",
-                response.data.jwt_token
-              );
-              setCurrentUser("currentUser", email, { path: "/" });
-              setCurrentToken("currentToken", user.access_token, { path: "/" });
-              window.location.reload();
-              window.location.replace("/");
+            )
+            console.log(response.data)
+            if (response.data.status == 'success') {
+              setCurrentLinksToken('currentLinksToken', response.data.jwt_token)
+              setCurrentUser('currentUser', email, { path: '/' })
+              setCurrentToken('currentToken', user.access_token, { path: '/' })
+              window.location.reload()
+              window.location.replace('/')
             }
           } catch (e) {
-            console.log("Log In Error: " + e);
+            console.log('Log In Error: ' + e)
           }
-        };
+        }
 
-        getLogin(user.access_token, response.data.email);
+        getLogin(user.access_token, response.data.email)
       } catch (e) {
-        console.log(e);
+        console.log(e)
       }
-    };
-    if (user) {
-      getGoogleAccount();
     }
-  }, user);
+    if (user) {
+      getGoogleAccount()
+    }
+  }, user)
 
   return (
     <>
@@ -84,8 +80,8 @@ export const GoogleLogIn = () => {
         variant="outline"
         className="flex justify-center items-center hover:brightness-50"
         onClick={() => {
-          setUser(null);
-          logIn();
+          setUser(null)
+          logIn()
         }}
       >
         <svg
@@ -115,5 +111,5 @@ export const GoogleLogIn = () => {
         Log In using Gmail
       </Button>
     </>
-  );
-};
+  )
+}
