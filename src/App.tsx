@@ -7,7 +7,7 @@ import { Toaster } from '@/components/ui/toaster'
 const App = () => {
   const clientID =
     (import.meta.env.VITE_APP_CLIENT_ID as string) ||
-    '631323246333-l06jvts5smd7u24e2egdifn05qaqbodu.apps.googleusercontent.com'
+    '700092127262-f74kc32n1f6hd9opj0o5dgklc266ljsc.apps.googleusercontent.com'
 
   return (
     <>
