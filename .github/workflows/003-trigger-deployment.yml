@@ -1,0 +1,44 @@
+---
+# deploy on coolify for dev/staging and digital ocean on prod
+name: Trigger Deployment
+on:
+  # TODO: uncomment if running on coolify/DigitalOcean
+  # workflow_run:
+  #   workflows:
+  #     - "Build and Push Image"
+  #   branches:
+  #     - main
+  #     - staging
+  #     - dev
+  #   types:
+  #     - completed
+  workflow_dispatch:
+
+jobs:
+  deploy-dev-staging:
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/dev' || github.ref == 'refs/heads/staging'
+    steps:
+      # NOTE: Needs COOLIFY_WEBHOOK and COOLIFY_TOKEN
+      # - You need to create a Coolify API Token and add it to your GitHub repository secrets.
+      # - Get the proper webhook endpoint from Coolify (Your resource / Webhook menu) and add it to your GitHub repository secrets.
+      - name: Deploy to Coolify
+        run: |
+          curl --request GET '${{ secrets.COOLIFY_WEBHOOK }}' --header 'Authorization: Bearer ${{ secrets.COOLIFY_TOKEN }}'
+
+  # deploy-prod:
+  #   runs-on: ubuntu-latest
+  #   if: github.ref == 'refs/heads/main'
+  #   steps:
+  #     - name: Install doctl
+  #       run: |
+  #         curl -sL https://github.com/digitalocean/doctl/releases/download/v1.99.0/doctl-1.99.0-linux-amd64.tar.gz | tar xz
+  #         sudo mv doctl /usr/local/bin
+  #     - name: Authenticate doctl
+  #       env:
+  #         DIGITALOCEAN_ACCESS_TOKEN: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+  #       run: doctl auth init -t $DIGITALOCEAN_ACCESS_TOKEN
+  #     - name: Update App Platform image
+  #       run: |
+  #         doctl apps update ${{ secrets.DO_APP_ID }} \
+  #           --spec .do/app.yaml
