@@ -1,54 +1,90 @@
-import Image from "next/image";
+"use client"
 
-export default function Home() {
+import { useState } from "react"
+import { MinimalHeader } from "@/components/minimal-header"
+import { HeroSection } from "@/components/hero-section"
+import { LinksList } from "@/components/links-list"
+import { LinkEditor } from "@/components/link-editor"
+import { mockLinks, type Link } from "@/lib/mock-data"
+
+export default function Dashboard() {
+  const [selectedLink, setSelectedLink] = useState<Link | null>(null)
+  const [links, setLinks] = useState<Link[]>(mockLinks)
+  const [activeTab, setActiveTab] = useState<"personal" | "marketing" | "product">("personal")
+  const [viewMode, setViewMode] = useState<"list" | "grid">("list")
+  const [searchQuery, setSearchQuery] = useState("")
+
+  const handleLinkSelect = (link: Link) => {
+    setSelectedLink(link)
+  }
+
+  const handleLinkUpdate = (updatedLink: Link) => {
+    setLinks((prev) => prev.map((link) => (link.id === updatedLink.id ? updatedLink : link)))
+    setSelectedLink(updatedLink)
+  }
+
+  const handleCreateLink = () => {
+    const newLink: Link = {
+      id: Date.now().toString(),
+      shortlink: "",
+      longLink: "",
+      createdBy: "sean_robenta@dlsu.edu.ph",
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      committeeId: activeTab === "personal" ? null : activeTab,
+      pinned: false,
+      clicks: 0,
+      lastClicked: null,
+    }
+    setLinks((prev) => [newLink, ...prev])
+    setSelectedLink(newLink)
+  }
+
+  const filteredLinks = links.filter((link) => {
+    const matchesTab = activeTab === "personal" ? link.committeeId === null : link.committeeId === activeTab
+
+    const matchesSearch =
+      searchQuery === "" ||
+      link.shortlink.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      link.longLink.toLowerCase().includes(searchQuery.toLowerCase())
+
+    return matchesTab && matchesSearch
+  })
+
+  const tabCounts = {
+    personal: links.filter((link) => link.committeeId === null).length,
+    marketing: links.filter((link) => link.committeeId === "marketing").length,
+    product: links.filter((link) => link.committeeId === "product").length,
+  }
+
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <div className="w-full flex justify-center items-center">
-          <Image
-            src="/lscs-logo.png"
-            alt="LSCS logo"
-            width={180}
-            height={38}
-            priority
+    <div className="min-h-screen bg-background text-foreground dark">
+      <MinimalHeader />
+
+      <HeroSection onCreateLink={handleCreateLink} />
+
+      <div className="flex h-[calc(100vh-200px)]">
+        <div className="w-3/7 flex-shrink-0">
+          <LinksList
+            links={filteredLinks}
+            selectedLink={selectedLink}
+            onLinkSelect={handleLinkSelect}
+            activeTab={activeTab}
+            onTabChange={setActiveTab}
+            viewMode={viewMode}
+            onViewModeChange={setViewMode}
+            searchQuery={searchQuery}
+            onSearchChange={setSearchQuery}
+            tabCounts={tabCounts}
           />
         </div>
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              src/app/page.tsx
-            </code>.
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://github.com/dlsu-lscs"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Visit LSCS
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Next.js Docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <span className="text-sm text-gray-500">
-          © 2025 LSCS App
-        </span>
-      </footer>
+        {selectedLink && (
+          <div className="flex-1">
+            <LinkEditor link={selectedLink} onUpdate={handleLinkUpdate} onClose={() => setSelectedLink(null)} />
+          </div>
+        )}
+      </div>
     </div>
-  );
+  )
 }
