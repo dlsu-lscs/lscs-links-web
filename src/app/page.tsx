@@ -10,7 +10,7 @@ import { mockLinks, type Link } from "@/lib/mock-data"
 export default function Dashboard() {
   const [selectedLink, setSelectedLink] = useState<Link | null>(null)
   const [links, setLinks] = useState<Link[]>(mockLinks)
-  const [activeTab, setActiveTab] = useState<"personal" | "marketing" | "product">("personal")
+  const [activeTab, setActiveTab] = useState<string>("personal")
   const [viewMode, setViewMode] = useState<"list" | "grid">("list")
   const [searchQuery, setSearchQuery] = useState("")
 
@@ -40,6 +40,15 @@ export default function Dashboard() {
     setSelectedLink(newLink)
   }
 
+  // Derive other tabs from existing committee IDs (excluding personal/null)
+  const otherTabs = Array.from(
+    new Set(
+      links
+        .map((l) => l.committeeId)
+        .filter((id): id is string => !!id)
+    )
+  ).map((key) => ({ key, label: `${key.charAt(0).toUpperCase()}${key.slice(1)} Team` }))
+
   const filteredLinks = links.filter((link) => {
     const matchesTab = activeTab === "personal" ? link.committeeId === null : link.committeeId === activeTab
 
@@ -51,11 +60,11 @@ export default function Dashboard() {
     return matchesTab && matchesSearch
   })
 
-  const tabCounts = {
-    personal: links.filter((link) => link.committeeId === null).length,
-    marketing: links.filter((link) => link.committeeId === "marketing").length,
-    product: links.filter((link) => link.committeeId === "product").length,
-  }
+  const tabCounts = links.reduce<Record<string, number>>((acc, link) => {
+    const key = link.committeeId ?? "personal"
+    acc[key] = (acc[key] ?? 0) + 1
+    return acc
+  }, { personal: 0 })
 
   return (
     <div className="min-h-screen bg-background text-foreground dark">
@@ -76,6 +85,7 @@ export default function Dashboard() {
             searchQuery={searchQuery}
             onSearchChange={setSearchQuery}
             tabCounts={tabCounts}
+            otherTabs={otherTabs}
           />
         </div>
 

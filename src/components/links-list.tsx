@@ -12,13 +12,14 @@ interface LinksListProps {
   links: Link[]
   selectedLink: Link | null
   onLinkSelect: (link: Link) => void
-  activeTab: "personal" | "marketing" | "product"
-  onTabChange: (tab: "personal" | "marketing" | "product") => void
+  activeTab: string // "personal" or any committee key
+  onTabChange: (tab: string) => void
   viewMode: "list" | "grid"
   onViewModeChange: (mode: "list" | "grid") => void
   searchQuery: string
   onSearchChange: (query: string) => void
-  tabCounts: { personal: number; marketing: number; product: number }
+  tabCounts: Record<string, number> // includes key "personal" and other committees
+  otherTabs: Array<{ key: string; label: string }>
 }
 
 export function LinksList({
@@ -32,6 +33,7 @@ export function LinksList({
   searchQuery,
   onSearchChange,
   tabCounts,
+  otherTabs,
 }: LinksListProps) {
   const sortedLinks = [...links].sort((a, b) => {
     if (a.pinned && !b.pinned) return -1
@@ -70,7 +72,7 @@ export function LinksList({
   }
 
   return (
-    <div className="h-full border-r border-border bg-card flex flex-col">
+    <div className="h-full border-r border-border bg-background flex flex-col">
       <div className="border-b border-border p-4">
         <div className="relative flex items-center">
           {canScrollLeft && (
@@ -86,7 +88,7 @@ export function LinksList({
 
           <div
             ref={tabsRef}
-            className="flex space-x-1 overflow-x-auto scrollbar-hide scroll-smooth px-8"
+            className="flex space-x-1 overflow-x-auto scrollbar-hide scroll-smooth"
             onScroll={checkScrollButtons}
           >
             <Button
@@ -95,36 +97,29 @@ export function LinksList({
               onClick={() => onTabChange("personal")}
               className="relative whitespace-nowrap flex-shrink-0"
             >
-              Personal
-                <Badge variant="destructive" className="ml-2 bg-info text-info-foreground text-xs">
+              
+                <Badge variant="destructive" className="bg-info text-info-foreground text-xs font-medium">
                   NEW!
                 </Badge>
+                Personal
               <Badge variant="outline" className="ml-2 text-xs">
-                {tabCounts.personal}
+                {tabCounts["personal"] ?? 0}
               </Badge>
             </Button>
-            <Button
-              variant={activeTab === "marketing" ? "secondary" : "ghost"}
-              size="sm"
-              onClick={() => onTabChange("marketing")}
-              className="whitespace-nowrap flex-shrink-0"
-            >
-              Marketing Team
-              <Badge variant="outline" className="ml-2 text-xs">
-                {tabCounts.marketing}
-              </Badge>
-            </Button>
-            <Button
-              variant={activeTab === "product" ? "secondary" : "ghost"}
-              size="sm"
-              onClick={() => onTabChange("product")}
-              className="whitespace-nowrap flex-shrink-0"
-            >
-              Product Team
-              <Badge variant="outline" className="ml-2 text-xs">
-                {tabCounts.product}
-              </Badge>
-            </Button>
+            {otherTabs.map((t) => (
+              <Button
+                key={t.key}
+                variant={activeTab === t.key ? "secondary" : "ghost"}
+                size="sm"
+                onClick={() => onTabChange(t.key)}
+                className="whitespace-nowrap flex-shrink-0"
+              >
+                {t.label}
+                <Badge variant="outline" className="ml-2 text-xs">
+                  {tabCounts[t.key] ?? 0}
+                </Badge>
+              </Button>
+            ))}
           </div>
 
           {canScrollRight && (
@@ -180,8 +175,8 @@ export function LinksList({
             <Card
               key={link.id}
               className={cn(
-                "p-3 cursor-pointer transition-colors hover:bg-accent/50 relative",
-                selectedLink?.id === link.id && "bg-accent border-primary",
+                "p-3 cursor-pointer transition-colors bg-background hover:bg-accent/50 relative",
+                selectedLink?.id === link.id && "bg-accent/30 border-accent",
               )}
               onClick={() => onLinkSelect(link)}
             >

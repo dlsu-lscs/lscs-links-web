@@ -12,7 +12,8 @@ interface HeroSectionProps {
 
 export function HeroSection({ onCreateLink }: HeroSectionProps) {
   return (
-    <div className="bg-gradient-to-r from-background to-muted/20 px-6 py-8">
+    // <div className="bg-gradient-to-r from-background to-muted/20 px-6 py-8">
+    <div className="bg-gradient-to-r from-yellow-500/20 via-muted/20 to-blue-950 px-6 py-12">
       <div className="flex items-center justify-between max-w-7xl mx-auto">
         {/* Left side - User info and actions */}
         <div className="flex flex-row items-center gap-6">
@@ -30,8 +31,8 @@ export function HeroSection({ onCreateLink }: HeroSectionProps) {
             </div>
 
             <div className="flex items-center gap-3">
-              <Button onClick={onCreateLink} className="bg-primary text-primary-foreground hover:bg-primary/90">
-                <Plus className="mr-2 h-4 w-4" />
+              <Button onClick={onCreateLink} variant="outline" size="sm" className="bg-primary font-medium hover:bg-primary/90">
+                <Plus className="h-4 w-4" />
                 Create Link
               </Button>
               <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground">
