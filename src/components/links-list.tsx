@@ -180,12 +180,17 @@ export function LinksList({
               )}
               onClick={() => onLinkSelect(link)}
             >
-              {link.pinned && <Pin className="absolute top-2 right-2 h-3 w-3 text-warning fill-current" />}
-
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
                   <div className="flex-1 min-w-0">
-                    <p className="font-medium text-sm truncate">{link.shortlink || "Untitled Link"}</p>
+                    <div className="flex items-center gap-1 min-w-0">
+                      <span className="font-medium text-sm truncate">
+                        {link.shortlink || "Untitled Link"}
+                      </span>
+                      {link.pinned && (
+                        <Pin className="h-3 w-3 text-warning fill-current flex-none" />
+                      )}
+                    </div>
                     <p className="text-xs text-muted-foreground truncate">{link.longLink || "No URL set"}</p>
                   </div>
                 </div>

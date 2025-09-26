@@ -46,11 +46,11 @@ export function HeroSection({ onCreateLink }: HeroSectionProps) {
         <div className="flex items-center gap-4">
           <Card className="bg-card/80 backdrop-blur-sm">
             <CardContent className="p-4">
-              <div className="flex items-start gap-3">
+              <div className="flex max-w-md items-start gap-3">
                 <MessageCircle className="h-5 w-5 text-primary mt-1 flex-shrink-0" />
                 <div className="space-y-2">
-                  <p className="text-sm text-muted-foreground">Need help creating links?</p>
-                  <p className="text-sm font-medium">Ask me anything!</p>
+                  <p className="text-sm text-muted-foreground">The Sandiganbayan ⚖️ allowed yesterday former San Juan 🏙️ mayor 👨‍💼 Jinggoy Estrada 😀 to undergo treatment 💉 for rectal bleeding 🩸, or hemorrhoids 🍑, at Makati Medical Center 🏥 (MMC) for five days 📅. </p>
+                  <p className="text-sm font-medium">—Macky</p>
                 </div>
               </div>
             </CardContent>
