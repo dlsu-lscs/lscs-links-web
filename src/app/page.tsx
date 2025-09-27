@@ -72,7 +72,7 @@ export default function Dashboard() {
 
       <HeroSection onCreateLink={handleCreateLink} />
 
-      <div className="flex h-[calc(100vh-200px)]">
+      <div className="flex h-[calc(100vh-200px)] min-h-0">
         <div className="w-3/7 flex-shrink-0">
           <LinksList
             links={filteredLinks}
@@ -90,7 +90,7 @@ export default function Dashboard() {
         </div>
 
         {selectedLink && (
-          <div className="flex-1">
+          <div className="flex-1 min-h-0 h-full">
             <LinkEditor link={selectedLink} onUpdate={handleLinkUpdate} onClose={() => setSelectedLink(null)} />
           </div>
         )}

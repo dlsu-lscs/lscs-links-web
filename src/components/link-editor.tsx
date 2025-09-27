@@ -8,7 +8,7 @@ import { Switch } from "@/components/ui/switch"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
-import { X, Copy, ExternalLink, BarChart3, Edit, Check, ChevronDown } from "lucide-react"
+import { X, Copy, ExternalLink, BarChart3, Edit, Check, ChevronDown, Info } from "lucide-react"
 import type { Link } from "@/lib/mock-data"
 
 interface LinkEditorProps {
@@ -91,7 +91,7 @@ export function LinkEditor({ link, onUpdate, onClose }: LinkEditorProps) {
   const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(shortUrl)}&margin=15`
 
   return (
-    <div className="flex-1 border-l border-border bg-background flex flex-col">
+    <div className="flex-1 border-l border-border bg-background flex flex-col min-h-0">
 
       <div className="flex-1 overflow-y-auto scrollbar-hide p-4 space-y-6">
         <div className="max-w-2xl mx-auto space-y-6 gap-12">
@@ -195,6 +195,7 @@ export function LinkEditor({ link, onUpdate, onClose }: LinkEditorProps) {
               {/* Committee */}
               <div className="space-y-2">
                 <Label>Committee</Label>
+                
                 <div className="relative flex items-center gap-2">
                   <div className="truncate text-sm text-foreground">
                     {formData.committeeId === null ? "Personal" : getCommitteeName(formData.committeeId)}
@@ -253,26 +254,35 @@ export function LinkEditor({ link, onUpdate, onClose }: LinkEditorProps) {
               </div>
 
               {/* Additional Information */}
-              <div className="space-y-2">
-                <Label>Additional Information</Label>
-                <div className="flex items-start gap-4">
+              <div className="space-y-4">
+                <Label className="inline-flex items-center gap-2">
+                  QR Code and Custom Link Metadata
+                </Label>
+                <div className="flex items-center">
+                <Info className="h-4 w-4 text-muted-foreground cursor-help" />
+                <span className="text-xs text-muted-foreground ml-2">
+                  Custom Link Metadata changes how your link appears when shared on social media platforms.
+                </span>
+                </div>
+                <div className="flex items-start gap-6">
                   {/* Left: QR code */}
                   <div className="flex-none">
                     <img
                       src={qrUrl}
                       alt="QR code"
-                      width={150}
-                      height={150}
-                      className="rounded-sm"
+                      width="auto"
+                      className="flex-1 rounded-sm"
                     />
                     <div className="mt-2">
-                      <a
-                        href={qrUrl}
-                        download={`qr-${formData.shortlink || "link"}.png`}
-                        className="text-xs text-primary underline"
+                      <Button
+                        onClick={() => {window.open(qrUrl, "_blank")}}
+                        variant="secondary"
+                        size="lg" 
+                        // download={`qr-${formData.shortlink || "link"}.png`}
+                        className="text-sm text-primary w-full"
                       >
                         Download
-                      </a>
+                      </Button>
                     </div>
                   </div>
 
