@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
 import { Card } from "@/components/ui/card"
-import { Search, List, Grid3X3, Pin, ExternalLink, QrCode, ChevronLeft, ChevronRight } from "lucide-react"
+import { Search, List, Grid3X3, Pin, ExternalLink, QrCode, ChevronLeft, ChevronRight, Copy } from "lucide-react"
 import type { Link } from "@/lib/mock-data"
 import { cn } from "@/lib/utils"
 import { useRef, useState, useEffect } from "react"
@@ -44,6 +44,8 @@ export function LinksList({
   const tabsRef = useRef<HTMLDivElement>(null)
   const [canScrollLeft, setCanScrollLeft] = useState(false)
   const [canScrollRight, setCanScrollRight] = useState(false)
+  const [copiedId, setCopiedId] = useState<string | null>(null)
+  const [focusedId, setFocusedId] = useState<string | null>(null)
 
   const checkScrollButtons = () => {
     if (tabsRef.current) {
@@ -68,6 +70,19 @@ export function LinksList({
         behavior: "smooth",
       })
       setTimeout(checkScrollButtons, 300)
+    }
+  }
+
+  const copyShortUrl = (shortlink: string, id: string) => {
+    const base = (process.env.NEXT_PUBLIC_SERVER_API_URL || "").replace(/\/$/, "")
+    const url = `${base}/${shortlink}`
+    if (navigator && navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(url).then(() => {
+        setCopiedId(id)
+        setTimeout(() => setCopiedId((prev) => (prev === id ? null : prev)), 1500)
+      }).catch(() => {
+        // noop on failure
+      })
     }
   }
 
@@ -217,15 +232,23 @@ export function LinksList({
                       >
                         <ExternalLink className="h-4 w-4" />
                       </a>
-                      {/* <a
-                        href={`${process.env.NEXT_PUBLIC_SERVER_API_URL}/${link.shortlink}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center justify-center h-8 w-8 rounded-md hover:bg-accent/10"
-                        title="Open link"
-                      >
-                        <QrCode className="h-4 w-4" />
-                      </a> */}
+                      <div className="relative">
+                        <button
+                          type="button"
+                          onClick={(e) => { e.stopPropagation(); copyShortUrl(link.shortlink, link.id); }}
+                          onFocus={() => setFocusedId(link.id)}
+                          onBlur={() => setFocusedId((prev) => (prev === link.id ? null : prev))}
+                          className="inline-flex items-center justify-center h-8 w-8 cursor-pointer rounded-md hover:bg-accent/10 focus:outline-none focus:ring-2 focus:ring-primary/40"
+                          aria-label="Copy short link"
+                        >
+                          <Copy className="h-4 w-4" />
+                        </button>
+                        {copiedId === link.id && focusedId === link.id && (
+                          <span className="pointer-events-none select-none absolute -top-8 right-0 whitespace-nowrap rounded-md border border-border bg-popover px-2 py-1 text-xs text-popover-foreground shadow-sm">
+                            Copied!
+                          </span>
+                        )}
+                      </div>
                     </div>
                   </div>
                 )}

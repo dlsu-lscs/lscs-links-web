@@ -1,6 +1,7 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useMemo } from "react"
+import { useSession } from "next-auth/react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -21,6 +22,47 @@ interface LinkEditorProps {
 }
 
 export function LinkEditor({ link, onUpdate, onClose, onDelete }: LinkEditorProps) {
+  const { data: session } = useSession()
+  type MemberJwt = {
+    email: string
+    sub: string
+    committee_id?: string | null
+    committee_name?: string | null
+    position_id?: string | null
+    position_name?: string | null
+  }
+  function decodeJwtPayload<T = unknown>(token?: string | null): T | null {
+    if (!token) return null
+    const parts = token.split(".")
+    if (parts.length < 2) return null
+    try {
+      const base = parts[1].replace(/-/g, "+").replace(/_/g, "/")
+      const padded = base + "===".slice((base.length + 3) % 4)
+      const json = atob(padded)
+      return JSON.parse(json) as T
+    } catch {
+      return null
+    }
+  }
+  const payload = useMemo(() => decodeJwtPayload<MemberJwt>((session as any)?.apiToken ?? null), [session])
+  const isExec = (payload?.position_id === "PRES" || payload?.position_id === "EVP")
+  const availableCommittees = useMemo(() => {
+    if (isExec) {
+      return [
+        { key: null as string | null, label: "Personal" },
+        ...COMMITTEES.map((c) => ({ key: c.id as string | null, label: c.name })),
+      ]
+    }
+    const cid = payload?.committee_id ?? null
+    // Non-exec: always show Personal; if user has a committee, also show that committee.
+    if (cid) {
+      return [
+        { key: null as string | null, label: "Personal" },
+        { key: cid as string | null, label: getCommitteeName(cid) },
+      ]
+    }
+    return [{ key: null as string | null, label: "Personal" }]
+  }, [isExec, payload?.committee_id])
   const [formData, setFormData] = useState({
     shortlink: link.shortlink,
     longLink: link.longLink,
@@ -228,10 +270,7 @@ export function LinkEditor({ link, onUpdate, onClose, onDelete }: LinkEditorProp
                   </Button>
                   {isCommitteeOpen && (
                     <div className="absolute top-full mt-1 z-20 w-48 rounded-md border border-border bg-popover p-1 shadow-md">
-                      {[
-                        { key: null as string | null, label: "Personal" },
-                        ...COMMITTEES.map((c) => ({ key: c.id as string | null, label: c.name })),
-                      ].map((opt) => (
+                      {availableCommittees.map((opt) => (
                         <button
                           key={String(opt.key)}
                           className="w-full text-left px-2 py-1.5 text-sm hover:bg-accent/50 rounded"
