@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import { useSession } from "next-auth/react"
 import { MinimalHeader } from "@/components/minimal-header"
 import { HeroSection } from "@/components/hero-section"
 import { LinksList } from "@/components/links-list"
@@ -9,6 +10,7 @@ import { type Link } from "@/lib/mock-data"
 import { fetchLinks } from "@/services/links"
 
 export default function Dashboard() {
+  const { data: session } = useSession()
   const [selectedLink, setSelectedLink] = useState<Link | null>(null)
   const [links, setLinks] = useState<Link[]>([])
   const [activeTab, setActiveTab] = useState<string>("personal")
@@ -59,7 +61,7 @@ export default function Dashboard() {
       id: `tmp-${Date.now()}`,
       shortlink: "",
       longLink: "",
-      createdBy: "sean_robenta@dlsu.edu.ph",
+      createdBy: session?.user?.email ?? "",
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
       committeeId: activeTab === "personal" ? null : activeTab,
