@@ -8,8 +8,10 @@ import { Switch } from "@/components/ui/switch"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
-import { X, Copy, ExternalLink, BarChart3, Edit, Check, ChevronDown, Info } from "lucide-react"
+import { X, Edit, Check, ChevronDown, Hammer } from "lucide-react"
 import type { Link } from "@/lib/mock-data"
+import { getCommitteeName, COMMITTEES } from "@/config/committees"
+import { updateLink } from "@/services/links"
 
 interface LinkEditorProps {
   link: Link
@@ -61,13 +63,28 @@ export function LinkEditor({ link, onUpdate, onClose }: LinkEditorProps) {
     })
   }, [link])
 
-  const handleSave = () => {
-    const updatedLink: Link = {
-      ...link,
-      ...formData,
-      updatedAt: new Date().toISOString(),
+  const [saving, setSaving] = useState(false)
+  const [saveError, setSaveError] = useState<string | null>(null)
+
+  const handleSave = async () => {
+    try {
+      setSaving(true)
+      setSaveError(null)
+      const payload = {
+        shortlink: formData.shortlink,
+        longlink: formData.longLink,
+        pinned: formData.pinned,
+        committee_id: formData.committeeId,
+      }
+      const saved = await updateLink(link.id, payload)
+      onUpdate({ ...saved, clicks: link.clicks, lastClicked: link.lastClicked })
+    } catch (e: unknown) {
+      console.error("Failed to save link", e)
+      const msg = e instanceof Error ? e.message : "Failed to save link"
+      setSaveError(msg)
+    } finally {
+      setSaving(false)
     }
-    onUpdate(updatedLink)
   }
 
   const handleCopyShortLink = () => {
@@ -76,16 +93,7 @@ export function LinkEditor({ link, onUpdate, onClose }: LinkEditorProps) {
     }
   }
 
-  const getCommitteeName = (committeeId: string | null) => {
-    switch (committeeId) {
-      case "marketing":
-        return "Research and Development"
-      case "product":
-        return "Documentations and Logistics"
-      default:
-        return "Personal"
-    }
-  }
+  // committee name helper now imported
 
   const shortUrl = `https://lscs.info/${formData.shortlink || ""}`
   const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(shortUrl)}&margin=15`
@@ -107,6 +115,19 @@ export function LinkEditor({ link, onUpdate, onClose }: LinkEditorProps) {
               >
                 <X className="h-4 w-4" />
               </Button> 
+              <div className="absolute right-12 top-2 flex items-center gap-2">
+                {saveError && (
+                  <span className="text-xs text-destructive">{saveError}</span>
+                )}
+                <Button
+                  variant="default"
+                  size="sm"
+                  onClick={handleSave}
+                  disabled={saving}
+                >
+                  {saving ? "Saving…" : "Save"}
+                </Button>
+              </div>
               <CardTitle className="text-xl space-y-1">           
                 <div className="flex">
                   <span className="inline-flex items-center text-muted-foreground font-bold">
@@ -213,8 +234,7 @@ export function LinkEditor({ link, onUpdate, onClose }: LinkEditorProps) {
                     <div className="absolute top-full mt-1 z-20 w-48 rounded-md border border-border bg-popover p-1 shadow-md">
                       {[
                         { key: null as string | null, label: "Personal" },
-                        { key: "marketing" as const, label: "Research and Development" },
-                        { key: "product" as const, label: "Documentations and Logistics" },
+                        ...COMMITTEES.map((c) => ({ key: c.id as string | null, label: c.name })),
                       ].map((opt) => (
                         <button
                           key={String(opt.key)}
@@ -253,64 +273,47 @@ export function LinkEditor({ link, onUpdate, onClose }: LinkEditorProps) {
                 </div>
               </div>
 
-              {/* Additional Information */}
-              <div className="space-y-4">
+              {/* Additional Information (coming soon) */}
+              <div className="space-y-2">
                 <Label className="inline-flex items-center gap-2">
-                  QR Code and Custom Link Metadata
+                  <Hammer className="h-4 w-4" /> Coming soon!
                 </Label>
-                <div className="flex items-center">
-                <Info className="h-4 w-4 text-muted-foreground cursor-help" />
-                <span className="text-xs text-muted-foreground ml-2">
-                  Custom Link Metadata changes how your link appears when shared on social media platforms.
-                </span>
-                </div>
-                <div className="flex items-start gap-6">
-                  {/* Left: QR code */}
-                  <div className="flex-none">
-                    <img
-                      src={qrUrl}
-                      alt="QR code"
-                      width="auto"
-                      className="flex-1 rounded-sm"
-                    />
-                    <div className="mt-2">
-                      <Button
-                        onClick={() => {window.open(qrUrl, "_blank")}}
-                        variant="secondary"
-                        size="lg" 
-                        // download={`qr-${formData.shortlink || "link"}.png`}
-                        className="text-sm text-primary w-full"
-                      >
-                        Download
-                      </Button>
-                    </div>
-                  </div>
-
-                  {/* Right: Preview card */}
-                  <div className="flex-1 min-w-0">
-                    <div className="rounded-t-md overflow-hidden border border-border bg-muted/20">
-                      <img
-                        src="https://placehold.co/800x400"
-                        alt="Link preview"
-                        className="w-full h-40 object-cover"
-                      />
-                    </div>
-                    <div className="bg-card border border-border border-t-0 rounded-b-md p-3 flex items-start justify-between">
-                      <div className="min-w-0 pr-2">
-                        <div className="font-medium truncate">Preview title</div>
-                        <div className="text-sm text-muted-foreground truncate">
-                          Preview description goes here. This will describe the link target.
+                <div className="relative">
+                  <div className="pointer-events-none select-none blur-sm">
+                    <div className="rounded-md border border-border p-4 bg-muted/30">
+                      <div className="flex items-start gap-6">
+                        <div className="flex-none">
+                          <img src={qrUrl} alt="QR code" width="auto" className="flex-1 rounded-sm" />
+                          <div className="mt-2">
+                            <Button variant="secondary" size="sm" className="text-sm text-primary" disabled>
+                              Download
+                            </Button>
+                          </div>
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="rounded-t-md overflow-hidden border border-border bg-muted/20">
+                            <img src="https://placehold.co/800x400" alt="Preview" className="w-full h-40 object-cover" />
+                          </div>
+                          <div className="bg-card border border-border border-t-0 rounded-b-md p-3 flex items-start justify-between">
+                            <div className="min-w-0 pr-2">
+                              <div className="font-medium truncate">Preview title</div>
+                              <div className="text-sm text-muted-foreground truncate">Preview description goes here.</div>
+                            </div>
+                            <Button variant="ghost" size="icon" aria-label="Edit preview" disabled>
+                              <Edit className="h-4 w-4" />
+                            </Button>
+                          </div>
                         </div>
                       </div>
-                      <Button variant="ghost" size="icon" aria-label="Edit preview">
-                        <Edit className="h-4 w-4" />
-                      </Button>
                     </div>
+                  </div>
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <span className="text-sm text-muted-foreground bg-background/80 px-3 py-1 rounded-md border">Feature coming soon</span>
                   </div>
                 </div>
               </div>
 
-              {/* Analytics (moved from deprecated card) */}
+              {/* Analytics */}
               <div className="space-y-2">
                 <Label>Analytics</Label>
                 <div className="grid grid-cols-2 gap-4">

@@ -1,18 +1,42 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { MinimalHeader } from "@/components/minimal-header"
 import { HeroSection } from "@/components/hero-section"
 import { LinksList } from "@/components/links-list"
 import { LinkEditor } from "@/components/link-editor"
-import { mockLinks, type Link } from "@/lib/mock-data"
+import { type Link } from "@/lib/mock-data"
+import { fetchLinks } from "@/services/links"
 
 export default function Dashboard() {
   const [selectedLink, setSelectedLink] = useState<Link | null>(null)
-  const [links, setLinks] = useState<Link[]>(mockLinks)
+  const [links, setLinks] = useState<Link[]>([])
   const [activeTab, setActiveTab] = useState<string>("personal")
   const [viewMode, setViewMode] = useState<"list" | "grid">("list")
   const [searchQuery, setSearchQuery] = useState("")
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+
+  useEffect(() => {
+    let mounted = true
+    ;(async () => {
+      try {
+        setLoading(true)
+        const res = await fetchLinks({ page: 1, limit: 50 })
+        if (!mounted) return
+        setLinks(res.items)
+      } catch (e: unknown) {
+        console.error("Failed to load links", e)
+        const msg = e instanceof Error ? e.message : "Failed to load links"
+        if (mounted) setError(msg)
+      } finally {
+        if (mounted) setLoading(false)
+      }
+    })()
+    return () => {
+      mounted = false
+    }
+  }, [])
 
   const handleLinkSelect = (link: Link) => {
     setSelectedLink(link)
@@ -74,19 +98,25 @@ export default function Dashboard() {
 
       <div className="flex h-[calc(100vh-200px)] min-h-0">
         <div className="w-3/7 flex-shrink-0">
-          <LinksList
-            links={filteredLinks}
-            selectedLink={selectedLink}
-            onLinkSelect={handleLinkSelect}
-            activeTab={activeTab}
-            onTabChange={setActiveTab}
-            viewMode={viewMode}
-            onViewModeChange={setViewMode}
-            searchQuery={searchQuery}
-            onSearchChange={setSearchQuery}
-            tabCounts={tabCounts}
-            otherTabs={otherTabs}
-          />
+          {loading ? (
+            <div className="p-4 text-sm text-muted-foreground">Loading links…</div>
+          ) : error ? (
+            <div className="p-4 text-sm text-destructive">{error}</div>
+          ) : (
+            <LinksList
+              links={filteredLinks}
+              selectedLink={selectedLink}
+              onLinkSelect={handleLinkSelect}
+              activeTab={activeTab}
+              onTabChange={setActiveTab}
+              viewMode={viewMode}
+              onViewModeChange={setViewMode}
+              searchQuery={searchQuery}
+              onSearchChange={setSearchQuery}
+              tabCounts={tabCounts}
+              otherTabs={otherTabs}
+            />
+          )}
         </div>
 
         {selectedLink && (

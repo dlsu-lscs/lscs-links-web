@@ -1,5 +1,7 @@
 "use client"
 
+import { useEffect, useRef, useState } from "react"
+import { signOut, useSession } from "next-auth/react"
 import { Button } from "@/components/ui/button"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Card, CardContent } from "@/components/ui/card"
@@ -11,16 +13,72 @@ interface HeroSectionProps {
 }
 
 export function HeroSection({ onCreateLink }: HeroSectionProps) {
+  const { data: session } = useSession()
+  const [menuOpen, setMenuOpen] = useState(false)
+  const menuRef = useRef<HTMLDivElement | null>(null)
+
+  // Close dropdown on outside click
+  useEffect(() => {
+    function onClick(e: MouseEvent) {
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
+        setMenuOpen(false)
+      }
+    }
+    if (menuOpen) document.addEventListener("mousedown", onClick)
+    return () => document.removeEventListener("mousedown", onClick)
+  }, [menuOpen])
+
+  const userImage = session?.user?.image ?? "/placeholder-user.png"
+  const userName = session?.user?.name ?? ""
+  const userEmail = session?.user?.email ?? ""
+  const initials = (userName || userEmail)
+    .split(" ")
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((s) => s[0]?.toUpperCase())
+    .join("") || "U"
+
   return (
     // <div className="bg-gradient-to-r from-background to-muted/20 px-6 py-8">
     <div className="bg-gradient-to-r from-yellow-500/20 via-muted/20 to-blue-950 px-6 py-12">
       <div className="flex items-center justify-between max-w-7xl mx-auto">
         {/* Left side - User info and actions */}
         <div className="flex flex-row items-center gap-6">
-          <Avatar className="h-26 w-26">
-            <AvatarImage src="/placeholder-user.png" />
-            <AvatarFallback className="bg-secondary text-secondary-foreground text-2xl">SR</AvatarFallback>
-          </Avatar>
+          <div className="relative" ref={menuRef}>
+            <button
+              type="button"
+              onClick={() => setMenuOpen((v) => !v)}
+              aria-haspopup="menu"
+              aria-expanded={menuOpen}
+              className="rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
+            >
+              <Avatar className="h-26 w-26">
+                <AvatarImage src={userImage} />
+                <AvatarFallback className="bg-secondary text-secondary-foreground text-2xl">
+                  {initials}
+                </AvatarFallback>
+              </Avatar>
+            </button>
+
+            {menuOpen && (
+              <div
+                role="menu"
+                className="absolute right-0 mt-2 w-48 rounded-md border bg-card text-card-foreground shadow-md z-50"
+              >
+                <div className="px-3 py-2 text-sm text-muted-foreground truncate">
+                  {userName || userEmail || "Signed in"}
+                </div>
+                <div className="border-t" />
+                <button
+                  role="menuitem"
+                  className="w-full text-left px-3 py-2 text-sm hover:bg-accent hover:text-accent-foreground"
+                  onClick={() => signOut({ callbackUrl: "/login" })}
+                >
+                  Log out
+                </button>
+              </div>
+            )}
+          </div>
 
           <div className="space-y-4">
             <div>
