@@ -110,3 +110,18 @@ export async function createLink(payload: CreateLinkPayload): Promise<UiLink> {
   const res = (await resp.json()) as { status: string; link: ApiLink };
   return mapApiLink(res.link);
 }
+
+export async function deleteLink(id: string): Promise<void> {
+  const session = await getSession();
+  const token = (session && typeof session === "object" ? (session as { apiToken?: string }).apiToken : undefined);
+  const base = (process.env.NEXT_PUBLIC_SERVER_API_URL || process.env.SERVER_API_URL || "").replace(/\/$/, "");
+  if (!base) throw new Error("SERVER_API_URL is not configured. Set NEXT_PUBLIC_SERVER_API_URL in .env.local for client fetches.");
+  const resp = await fetch(`${base}/admin/links/${id}`, {
+    method: "DELETE",
+    headers: {
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    },
+  });
+  if (!resp.ok) throw new Error(`DELETE /admin/links/${id} failed: ${resp.status} ${resp.statusText}`);
+  // Backend responds with { status: 'ok', message: 'Link deleted successfully' }
+}

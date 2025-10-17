@@ -33,10 +33,7 @@ export function MinimalHeader() {
     <div className="border-b border-border bg-header px-6 py-3">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-            <span className="text-primary-foreground font-bold text-sm">SL</span>
-          </div>
-          <span className="font-semibold text-header-foreground">ShortLink</span>
+          <span className="font-semibold text-header-foreground">Project Mackylala: LSCS Links</span>
         </div>
 
         <div className="relative" ref={menuRef}>

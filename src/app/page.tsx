@@ -71,6 +71,31 @@ export default function Dashboard() {
     setSelectedLink(newLink)
   }
 
+  const refreshList = async () => {
+    try {
+      const res = await fetchLinks({ page: 1, limit: 50 })
+      setLinks(res.items)
+    } catch (e) {
+      console.error("Failed to refresh links", e)
+    }
+  }
+
+  const handleDelete = async (id: string) => {
+    // Remove locally first for immediate feedback
+    setLinks((prev) => prev.filter((l) => l.id !== id))
+    setSelectedLink(null)
+    // Then refresh from server to ensure counts and filters are correct
+    await refreshList()
+  }
+
+  const handleCloseEditor = () => {
+    // If closing a new unsaved link (tmp-), remove it
+    if (selectedLink && String(selectedLink.id).startsWith("tmp-")) {
+      setLinks((prev) => prev.filter((l) => l.id !== selectedLink.id))
+    }
+    setSelectedLink(null)
+  }
+
   // Derive other tabs from existing committee IDs (excluding personal/null)
   const otherTabs = Array.from(
     new Set(
@@ -128,7 +153,7 @@ export default function Dashboard() {
 
         {selectedLink && (
           <div className="flex-1 min-h-0 h-full">
-            <LinkEditor link={selectedLink} onUpdate={handleLinkUpdate} onClose={() => setSelectedLink(null)} />
+            <LinkEditor link={selectedLink} onUpdate={handleLinkUpdate} onClose={handleCloseEditor} onDelete={handleDelete} />
           </div>
         )}
       </div>

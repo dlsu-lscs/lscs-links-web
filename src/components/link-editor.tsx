@@ -11,15 +11,16 @@ import { Badge } from "@/components/ui/badge"
 import { X, Edit, Check, ChevronDown, Hammer } from "lucide-react"
 import type { Link } from "@/lib/mock-data"
 import { getCommitteeName, COMMITTEES, normalizeCommitteeId } from "@/config/committees"
-import { updateLink, createLink } from "@/services/links"
+import { updateLink, createLink, deleteLink } from "@/services/links"
 
 interface LinkEditorProps {
   link: Link
   onUpdate: (link: Link) => void
   onClose: () => void
+  onDelete: (id: string) => void
 }
 
-export function LinkEditor({ link, onUpdate, onClose }: LinkEditorProps) {
+export function LinkEditor({ link, onUpdate, onClose, onDelete }: LinkEditorProps) {
   const [formData, setFormData] = useState({
     shortlink: link.shortlink,
     longLink: link.longLink,
@@ -65,6 +66,9 @@ export function LinkEditor({ link, onUpdate, onClose }: LinkEditorProps) {
 
   const [saving, setSaving] = useState(false)
   const [saveError, setSaveError] = useState<string | null>(null)
+  const [confirmOpen, setConfirmOpen] = useState(false)
+  const [deleting, setDeleting] = useState(false)
+  const [deleteError, setDeleteError] = useState<string | null>(null)
 
   const handleSave = async () => {
     try {
@@ -320,6 +324,22 @@ export function LinkEditor({ link, onUpdate, onClose }: LinkEditorProps) {
                 </div>
               </div>
 
+              {/* Delete action */}
+              <div className="pt-4">
+                {deleteError && (
+                  <div className="text-xs text-destructive mb-2">{deleteError}</div>
+                )}
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="w-full border border-destructive text-destructive"
+                  onClick={() => setConfirmOpen(true)}
+                  disabled={deleting}
+                >
+                  {deleting ? "Deleting…" : "Delete link"}
+                </Button>
+              </div>
+
                         {/* Footer note */}
           <div className="text-xs text-muted-foreground pt-4">
             Last updated by {link.createdBy} {formatRelativeTime(link.updatedAt)}.
@@ -329,6 +349,52 @@ export function LinkEditor({ link, onUpdate, onClose }: LinkEditorProps) {
 
         </div>
       </div>
+      {/* Confirmation Modal */}
+      {confirmOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
+          <div className="absolute inset-0 bg-black/50" onClick={() => !deleting && setConfirmOpen(false)} />
+          <div className="relative z-10 w-[90%] max-w-sm rounded-md border bg-card p-4 shadow-lg">
+            <div className="text-base font-semibold mb-1">Delete link?</div>
+            <div className="text-sm text-muted-foreground mb-4">
+              This action cannot be undone. Are you sure you want to delete <span className="font-medium">lscs.info/{formData.shortlink || link.shortlink}</span>?
+            </div>
+            <div className="flex gap-2 justify-end">
+              <Button variant="outline" size="sm" onClick={() => setConfirmOpen(false)} disabled={deleting}>
+                Cancel
+              </Button>
+              <Button
+                variant="destructive"
+                size="sm"
+                onClick={async () => {
+                  try {
+                    setDeleteError(null)
+                    setDeleting(true)
+                    setConfirmOpen(true)
+                    // If it's a temp link (not created yet), just close the editor.
+                    if (String(link.id).startsWith("tmp-")) {
+                      onDelete(link.id)
+                      onClose()
+                      return
+                    }
+                    await deleteLink(link.id)
+                    onDelete(link.id)
+                  } catch (e: unknown) {
+                    console.error("Failed to delete link", e)
+                    const msg = e instanceof Error ? e.message : "Failed to delete link"
+                    setDeleteError(msg)
+                  } finally {
+                    setDeleting(false)
+                    setConfirmOpen(false)
+                  }
+                }}
+                disabled={deleting}
+              >
+                {deleting ? "Deleting…" : "Delete"}
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
