@@ -38,3 +38,9 @@ export function getCommitteeName(id: string | null | undefined): string {
 export function isValidCommitteeId(id: string | null | undefined): id is CommitteeId {
   return !!id && id in COMMITTEE_MAP;
 }
+
+export function normalizeCommitteeId(id: string | null | undefined): string | null {
+  if (!id) return null;
+  const up = id.trim().toUpperCase();
+  return COMMITTEE_MAP[up] ? up : null;
+}

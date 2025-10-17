@@ -196,11 +196,36 @@ export function LinksList({
                 </div>
 
                 {viewMode === "list" && (
-                  <div className="flex items-center justify-between text-xs text-muted-foreground">
-                    <span>{link.clicks} clicks</span>
-                    <div className="flex items-center gap-2">
-                      <ExternalLink className="h-3 w-3" />
-                      <QrCode className="h-3 w-3" />
+                  <div className="flex items-right justify-between text-xs text-muted-foreground">
+                    {/* <span>{link.clicks} clicks</span> */}
+                    <span>
+                      Last updated on {new Date(link.updatedAt).toLocaleString('en-US', {
+                        month: 'long',
+                        day: 'numeric',
+                        year: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit',
+                      })}.
+                    </span>
+                    <div className="flex items-center gap-2 absolute bottom-2 right-2">
+                      <a
+                        href={`${process.env.NEXT_PUBLIC_SERVER_API_URL}/${link.shortlink}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center justify-center h-8 w-8 rounded-md hover:bg-accent/10"
+                        title="Open link"
+                      >
+                        <ExternalLink className="h-4 w-4" />
+                      </a>
+                      {/* <a
+                        href={`${process.env.NEXT_PUBLIC_SERVER_API_URL}/${link.shortlink}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center justify-center h-8 w-8 rounded-md hover:bg-accent/10"
+                        title="Open link"
+                      >
+                        <QrCode className="h-4 w-4" />
+                      </a> */}
                     </div>
                   </div>
                 )}

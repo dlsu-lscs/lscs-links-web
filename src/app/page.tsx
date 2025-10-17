@@ -43,13 +43,20 @@ export default function Dashboard() {
   }
 
   const handleLinkUpdate = (updatedLink: Link) => {
-    setLinks((prev) => prev.map((link) => (link.id === updatedLink.id ? updatedLink : link)))
+    setLinks((prev) => {
+      const currentId = selectedLink?.id
+      if (currentId && currentId !== updatedLink.id) {
+        // Replace the temp entry by the newly saved one
+        return prev.map((l) => (l.id === currentId ? updatedLink : l))
+      }
+      return prev.map((l) => (l.id === updatedLink.id ? updatedLink : l))
+    })
     setSelectedLink(updatedLink)
   }
 
   const handleCreateLink = () => {
     const newLink: Link = {
-      id: Date.now().toString(),
+      id: `tmp-${Date.now()}`,
       shortlink: "",
       longLink: "",
       createdBy: "sean_robenta@dlsu.edu.ph",
@@ -71,7 +78,7 @@ export default function Dashboard() {
         .map((l) => l.committeeId)
         .filter((id): id is string => !!id)
     )
-  ).map((key) => ({ key, label: `${key.charAt(0).toUpperCase()}${key.slice(1)} Team` }))
+  ).map((key) => ({ key, label: `${key.charAt(0).toUpperCase()}${key.slice(1)}` }))
 
   const filteredLinks = links.filter((link) => {
     const matchesTab = activeTab === "personal" ? link.committeeId === null : link.committeeId === activeTab

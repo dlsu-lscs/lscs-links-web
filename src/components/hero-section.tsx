@@ -1,12 +1,36 @@
 "use client"
 
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useMemo, useRef, useState } from "react"
 import { signOut, useSession } from "next-auth/react"
 import { Button } from "@/components/ui/button"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Settings, Plus, MessageCircle } from "lucide-react"
+import { getCommitteeName } from "@/config/committees"
+
+type MemberJwt = {
+  email: string
+  sub: string
+  committee_id?: string | null
+  committee_name?: string | null
+  position_id?: string | null
+  position_name?: string | null
+}
+
+function decodeJwtPayload<T = unknown>(token?: string | null): T | null {
+  if (!token) return null
+  const parts = token.split(".")
+  if (parts.length < 2) return null
+  try {
+    const base = parts[1].replace(/-/g, "+").replace(/_/g, "/")
+    const padded = base + "===".slice((base.length + 3) % 4)
+    const json = atob(padded)
+    return JSON.parse(json) as T
+  } catch {
+    return null
+  }
+}
 
 interface HeroSectionProps {
   onCreateLink: () => void
@@ -31,6 +55,9 @@ export function HeroSection({ onCreateLink }: HeroSectionProps) {
   const userImage = session?.user?.image ?? "/placeholder-user.png"
   const userName = session?.user?.name ?? ""
   const userEmail = session?.user?.email ?? ""
+  const payload = useMemo(() => decodeJwtPayload<MemberJwt>(session?.apiToken ?? null), [session?.apiToken])
+  const committeeLabel = payload?.committee_name || getCommitteeName(payload?.committee_id ?? null)
+  const positionLabel = payload?.position_name || payload?.position_id || ""
   const initials = (userName || userEmail)
     .split(" ")
     .filter(Boolean)
@@ -83,9 +110,9 @@ export function HeroSection({ onCreateLink }: HeroSectionProps) {
           <div className="space-y-4">
             <div>
               <div className="flex flex-col2 items-center gap-2">
-              <h1 className="text-2xl font-bold text-foreground">Sean Denzel Robenta <Badge variant="outline">Research & Development</Badge></h1>
+              <h1 className="text-2xl font-bold text-foreground">{userName || userEmail || "Signed in"} <Badge variant="outline">{committeeLabel}</Badge></h1>
               </div>
-              <p className="text-muted-foreground">Senior Developer</p>
+              <p className="text-muted-foreground">{positionLabel}</p>
             </div>
 
             <div className="flex items-center gap-3">
@@ -93,9 +120,9 @@ export function HeroSection({ onCreateLink }: HeroSectionProps) {
                 <Plus className="h-4 w-4" />
                 Create Link
               </Button>
-              <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground">
+              {/* <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground">
                 <Settings className="h-5 w-5" />
-              </Button>
+              </Button> */}
             </div>
           </div>
         </div>

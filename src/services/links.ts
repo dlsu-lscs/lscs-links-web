@@ -1,5 +1,6 @@
 import { getSession } from "next-auth/react";
 import type { Link as UiLink } from "@/lib/mock-data";
+import { normalizeCommitteeId } from "@/config/committees";
 
 // Backend API Link shape (from docs)
 type ApiLink = {
@@ -72,9 +73,40 @@ export async function updateLink(id: string, payload: UpdateLinkPayload): Promis
       "Content-Type": "application/json",
       ...(token ? { Authorization: `Bearer ${token}` } : {}),
     },
-    body: JSON.stringify(payload),
+    body: JSON.stringify({
+      ...payload,
+      committee_id: normalizeCommitteeId(payload.committee_id ?? null),
+    }),
   });
   if (!resp.ok) throw new Error(`PUT /admin/links/${id} failed: ${resp.status} ${resp.statusText}`);
+  const res = (await resp.json()) as { status: string; link: ApiLink };
+  return mapApiLink(res.link);
+}
+
+export type CreateLinkPayload = {
+  shortlink: string;
+  longlink: string;
+  pinned?: boolean;
+  committee_id?: string | null;
+};
+
+export async function createLink(payload: CreateLinkPayload): Promise<UiLink> {
+  const session = await getSession();
+  const token = (session && typeof session === "object" ? (session as { apiToken?: string }).apiToken : undefined);
+  const base = (process.env.NEXT_PUBLIC_SERVER_API_URL || process.env.SERVER_API_URL || "").replace(/\/$/, "");
+  if (!base) throw new Error("SERVER_API_URL is not configured. Set NEXT_PUBLIC_SERVER_API_URL in .env.local for client fetches.");
+  const resp = await fetch(`${base}/admin/create`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    },
+    body: JSON.stringify({
+      ...payload,
+      committee_id: normalizeCommitteeId(payload.committee_id ?? null),
+    }),
+  });
+  if (!resp.ok) throw new Error(`POST /admin/create failed: ${resp.status} ${resp.statusText}`);
   const res = (await resp.json()) as { status: string; link: ApiLink };
   return mapApiLink(res.link);
 }

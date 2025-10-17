@@ -10,8 +10,8 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
 import { X, Edit, Check, ChevronDown, Hammer } from "lucide-react"
 import type { Link } from "@/lib/mock-data"
-import { getCommitteeName, COMMITTEES } from "@/config/committees"
-import { updateLink } from "@/services/links"
+import { getCommitteeName, COMMITTEES, normalizeCommitteeId } from "@/config/committees"
+import { updateLink, createLink } from "@/services/links"
 
 interface LinkEditorProps {
   link: Link
@@ -74,9 +74,10 @@ export function LinkEditor({ link, onUpdate, onClose }: LinkEditorProps) {
         shortlink: formData.shortlink,
         longlink: formData.longLink,
         pinned: formData.pinned,
-        committee_id: formData.committeeId,
+        committee_id: normalizeCommitteeId(formData.committeeId),
       }
-      const saved = await updateLink(link.id, payload)
+      const isTemp = String(link.id).startsWith("tmp-")
+      const saved = isTemp ? await createLink(payload) : await updateLink(link.id, payload)
       onUpdate({ ...saved, clicks: link.clicks, lastClicked: link.lastClicked })
     } catch (e: unknown) {
       console.error("Failed to save link", e)
@@ -86,20 +87,11 @@ export function LinkEditor({ link, onUpdate, onClose }: LinkEditorProps) {
       setSaving(false)
     }
   }
-
-  const handleCopyShortLink = () => {
-    if (formData.shortlink) {
-      navigator.clipboard.writeText(`https://short.ly/${formData.shortlink}`)
-    }
-  }
-
-  // committee name helper now imported
-
   const shortUrl = `https://lscs.info/${formData.shortlink || ""}`
   const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(shortUrl)}&margin=15`
 
   return (
-    <div className="flex-1 border-l border-border bg-background flex flex-col min-h-0">
+    <div className="h-full flex-1 border-l border-border bg-background flex flex-col min-h-0">
 
       <div className="flex-1 overflow-y-auto scrollbar-hide p-4 space-y-6">
         <div className="max-w-2xl mx-auto space-y-6 gap-12">
@@ -170,12 +162,12 @@ export function LinkEditor({ link, onUpdate, onClose }: LinkEditorProps) {
                 </div>
                 
               <div className="flex items-center gap-2">
-                <Switch
+                {/* <Switch
                   id="pinned"
                   checked={formData.pinned}
                   onCheckedChange={(checked) => setFormData((prev) => ({ ...prev, pinned: checked }))}
                 />
-                <Label htmlFor="pinned">Pinned</Label>
+                <Label htmlFor="pinned">Pinned</Label> */}
               </div></CardTitle>
             </CardHeader>
             <CardContent className="space-y-6 relative">
