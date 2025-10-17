@@ -44,7 +44,7 @@ export function LinkEditor({ link, onUpdate, onClose, onDelete }: LinkEditorProp
       return null
     }
   }
-  const payload = useMemo(() => decodeJwtPayload<MemberJwt>((session as any)?.apiToken ?? null), [session])
+  const payload = useMemo(() => decodeJwtPayload<MemberJwt>(session?.apiToken ?? null), [session])
   const isExec = (payload?.position_id === "PRES" || payload?.position_id === "EVP")
   const availableCommittees = useMemo(() => {
     if (isExec) {
