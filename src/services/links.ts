@@ -39,8 +39,11 @@ function mapApiLink(l: ApiLink): UiLink {
 export async function fetchLinks({ page = 1, limit = 50 } = {}): Promise<{ items: UiLink[]; total: number; page: number; totalPages: number }> {
   const session = await getSession();
   const token = (session && typeof session === "object" ? (session as { apiToken?: string }).apiToken : undefined);
-  const base = (process.env.NEXT_PUBLIC_SERVER_API_URL || process.env.SERVER_API_URL || "").replace(/\/$/, "");
-  if (!base) throw new Error("SERVER_API_URL is not configured. Set NEXT_PUBLIC_SERVER_API_URL in .env.local for client fetches.");
+  
+  // Use relative path on client to use Next.js proxy (bypassing CORS), absolute on server.
+  const base = typeof window !== "undefined" ? "" : (process.env.NEXT_PUBLIC_SERVER_API_URL || process.env.SERVER_API_URL || "").replace(/\/$/, "");
+
+  if (typeof window === "undefined" && !base) throw new Error("SERVER_API_URL is not configured. Set NEXT_PUBLIC_SERVER_API_URL in .env.local for client fetches.");
   const resp = await fetch(`${base}/admin/links?page=${page}&limit=${limit}`, {
     headers: token ? { Authorization: `Bearer ${token}` } : undefined,
     cache: "no-store",
@@ -65,8 +68,11 @@ export type UpdateLinkPayload = Partial<{
 export async function updateLink(id: string, payload: UpdateLinkPayload): Promise<UiLink> {
   const session = await getSession();
   const token = (session && typeof session === "object" ? (session as { apiToken?: string }).apiToken : undefined);
-  const base = (process.env.NEXT_PUBLIC_SERVER_API_URL || process.env.SERVER_API_URL || "").replace(/\/$/, "");
-  if (!base) throw new Error("SERVER_API_URL is not configured. Set NEXT_PUBLIC_SERVER_API_URL in .env.local for client fetches.");
+  
+  // Use relative path on client to use Next.js proxy (bypassing CORS), absolute on server.
+  const base = typeof window !== "undefined" ? "" : (process.env.NEXT_PUBLIC_SERVER_API_URL || process.env.SERVER_API_URL || "").replace(/\/$/, "");
+
+  if (typeof window === "undefined" && !base) throw new Error("SERVER_API_URL is not configured. Set NEXT_PUBLIC_SERVER_API_URL in .env.local for client fetches.");
   const resp = await fetch(`${base}/admin/links/${id}`, {
     method: "PUT",
     headers: {
@@ -93,8 +99,11 @@ export type CreateLinkPayload = {
 export async function createLink(payload: CreateLinkPayload): Promise<UiLink> {
   const session = await getSession();
   const token = (session && typeof session === "object" ? (session as { apiToken?: string }).apiToken : undefined);
-  const base = (process.env.NEXT_PUBLIC_SERVER_API_URL || process.env.SERVER_API_URL || "").replace(/\/$/, "");
-  if (!base) throw new Error("SERVER_API_URL is not configured. Set NEXT_PUBLIC_SERVER_API_URL in .env.local for client fetches.");
+  
+  // Use relative path on client to use Next.js proxy (bypassing CORS), absolute on server.
+  const base = typeof window !== "undefined" ? "" : (process.env.NEXT_PUBLIC_SERVER_API_URL || process.env.SERVER_API_URL || "").replace(/\/$/, "");
+
+  if (typeof window === "undefined" && !base) throw new Error("SERVER_API_URL is not configured. Set NEXT_PUBLIC_SERVER_API_URL in .env.local for client fetches.");
   const resp = await fetch(`${base}/admin/create`, {
     method: "POST",
     headers: {
@@ -114,8 +123,11 @@ export async function createLink(payload: CreateLinkPayload): Promise<UiLink> {
 export async function deleteLink(id: string): Promise<void> {
   const session = await getSession();
   const token = (session && typeof session === "object" ? (session as { apiToken?: string }).apiToken : undefined);
-  const base = (process.env.NEXT_PUBLIC_SERVER_API_URL || process.env.SERVER_API_URL || "").replace(/\/$/, "");
-  if (!base) throw new Error("SERVER_API_URL is not configured. Set NEXT_PUBLIC_SERVER_API_URL in .env.local for client fetches.");
+  
+  // Use relative path on client to use Next.js proxy (bypassing CORS), absolute on server.
+  const base = typeof window !== "undefined" ? "" : (process.env.NEXT_PUBLIC_SERVER_API_URL || process.env.SERVER_API_URL || "").replace(/\/$/, "");
+
+  if (typeof window === "undefined" && !base) throw new Error("SERVER_API_URL is not configured. Set NEXT_PUBLIC_SERVER_API_URL in .env.local for client fetches.");
   const resp = await fetch(`${base}/admin/links/${id}`, {
     method: "DELETE",
     headers: {
