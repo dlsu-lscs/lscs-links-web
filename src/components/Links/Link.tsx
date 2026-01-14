@@ -29,7 +29,8 @@ export const Link = ({
     qr_download,
 }: linkData) => {
   //Constant URI LINK
-  const URLLINK = import.meta.env.VITE_APP_LINKS_URL || "https://links.api.dlsu-lscs.org";
+  const URLLINK = import.meta.env.VITE_APP_LINKS_URL || "https://lscs.info";
+  const DOMAIN = URLLINK.replace(/^https?:\/\//, '').replace(/\/$/, '');
 
     const [currentLinksToken] = useCookies(["currentLinksToken"]);
     const token = currentLinksToken.currentLinksToken;
@@ -58,14 +59,14 @@ export const Link = ({
                                 onClick={async () => {
                                     try {
                                         await navigator.clipboard.writeText(
-                                            `links.api.dlsu-lscs.org/${shortLink}`
+                                            `${DOMAIN}/${shortLink}`
                                         );
                                     } catch (e) {
                                         console.log(e);
                                     }
                                 }}
                             >
-                                <span className="font-bold">links.api.dlsu-lscs.org</span>/{shortLink}
+                                <span className="font-bold">{DOMAIN}</span>/{shortLink}
                             </h1>
                             <EditLink linkID={linkID}></EditLink>
                             <Badge className="text-black bg-white font-bold">rnd</Badge>

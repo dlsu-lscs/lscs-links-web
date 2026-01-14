@@ -31,7 +31,8 @@ const linkSchema = z.object({
 
 export const CreateLink = () => {
   //Constant URI LINK
-  const URLLINK = import.meta.env.VITE_APP_LINKS_URL || "https://links.api.dlsu-lscs.org";
+  const URLLINK = import.meta.env.VITE_APP_LINKS_URL || "https://lscs.info";
+  const DOMAIN = URLLINK.replace(/^https?:\/\//, '').replace(/\/$/, '');
 
     const [currentLinksToken] = useCookies(["currentLinksToken"]);
     const token = currentLinksToken.currentLinksToken;
@@ -98,7 +99,7 @@ export const CreateLink = () => {
                                                         <Input
                                                             {...field}
                                                             disabled
-                                                            value={"links.api.dlsu-lscs.org/"}
+                                                            value={DOMAIN + "/"}
                                                             className="text-white bg-[#333437] border-2 border-[#1D283A] rounded-l-lg w-1/4"
                                                         />
                                                     </FormControl>
