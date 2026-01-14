@@ -30,7 +30,7 @@ export const Link = ({
 }: linkData) => {
   //Constant URI LINK
   const URLLINK =
-    import.meta.env.VITE_APP_LINKS_URL || "https://lscs.info";
+    import.meta.env.VITE_APP_LINKS_URL || "https://links.api.dlsu-lscs.org";
 
     const [currentLinksToken] = useCookies(["currentLinksToken"]);
     const token = currentLinksToken.currentLinksToken;
@@ -59,14 +59,14 @@ export const Link = ({
                                 onClick={async () => {
                                     try {
                                         await navigator.clipboard.writeText(
-                                            `lscs.info/${shortLink}`
+                                            `links.api.dlsu-lscs.org/${shortLink}`
                                         );
                                     } catch (e) {
                                         console.log(e);
                                     }
                                 }}
                             >
-                                <span className="font-bold">lscs.info</span>/{shortLink}
+                                <span className="font-bold">links.api.dlsu-lscs.org</span>/{shortLink}
                             </h1>
                             <EditLink linkID={linkID}></EditLink>
                             <Badge className="text-black bg-white font-bold">rnd</Badge>

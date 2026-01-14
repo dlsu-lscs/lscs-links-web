@@ -32,7 +32,7 @@ const linkSchema = z.object({
 export const CreateLink = () => {
   //Constant URI LINK
   const URLLINK =
-    import.meta.env.VITE_APP_LINKS_URL || "https://lscs.info";
+    import.meta.env.VITE_APP_LINKS_URL || "https://links.api.dlsu-lscs.org";
 
     const [currentLinksToken] = useCookies(["currentLinksToken"]);
     const token = currentLinksToken.currentLinksToken;
@@ -99,7 +99,7 @@ export const CreateLink = () => {
                                                         <Input
                                                             {...field}
                                                             disabled
-                                                            value={"lscs.info/"}
+                                                            value={"links.api.dlsu-lscs.org/"}
                                                             className="text-white bg-[#333437] border-2 border-[#1D283A] rounded-l-lg w-1/4"
                                                         />
                                                     </FormControl>
