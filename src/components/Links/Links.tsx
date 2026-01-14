@@ -30,8 +30,7 @@ type Data = {
 
 export const Links = () => {
   //Constant URI LINK
-  const URLLINK =
-    import.meta.env.VITE_APP_LINKS_URL || "https://links.api.dlsu-lscs.org";
+  const URLLINK = import.meta.env.VITE_APP_LINKS_URL || "https://links.api.dlsu-lscs.org";
 
     const [currentLinksToken, ,] = useCookies(["currentLinksToken"]);
 

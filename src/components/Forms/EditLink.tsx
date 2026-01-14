@@ -38,8 +38,7 @@ type editLink = {
 
 export const EditLink = ({ linkID }: editLink) => {
   //Constant URI LINK
-  const URLLINK =
-    import.meta.env.VITE_APP_LINKS_URL || "https://links.api.dlsu-lscs.org";
+  const URLLINK = import.meta.env.VITE_APP_LINKS_URL || "https://links.api.dlsu-lscs.org";
 
     const [currentLinksToken] = useCookies(["currentLinksToken"]);
     const token = currentLinksToken.currentLinksToken;
@@ -83,7 +82,7 @@ export const EditLink = ({ linkID }: editLink) => {
         const deleteData = async () => {
             try {
                 const response = await axios.delete(
-                    "https://links.api.dlsu-lscs.org/admin/links/" + linkID,
+                    "${URLLINK}/admin/links/" + linkID,
                     {
                         headers: {
                             Authorization: `Bearer ${token}`,
